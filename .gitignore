@@ -153,3 +153,6 @@ $RECYCLE.BIN/
 # NuGet specific configuration
 packages/*
 !packages/repositories.config
+
+# MonoDevelop specific configuration
+*.userprefs

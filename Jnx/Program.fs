@@ -1,5 +1,7 @@
 module Jnx.Main
 
+open Nancy
+open Nancy.Conventions
 open Nancy.Hosting.Self
 open System
 open System.Threading
@@ -32,6 +34,13 @@ let parseCommandLine args =
             eprintfn "Option '%s' is unrecognized" x
             parseCommandLineRec xs options
     parseCommandLineRec (args |> Seq.toList) defaultOptions
+
+type Bootstrapper() =
+    inherit DefaultNancyBootstrapper()
+
+    override this.ConfigureConventions conventions =
+        base.ConfigureConventions conventions
+        conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("Scripts", "Scripts", "js"))
 
 [<EntryPoint>]
 let main args =
