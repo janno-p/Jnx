@@ -55,6 +55,7 @@
     <Compile Include="ModuleUtils.fs" />
     <Compile Include="BlogsModule.fs" />
     <Compile Include="CoinsModule.fs" />
+    <Compile Include="SiteModule.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -94,11 +95,15 @@
     <None Include="Views\Blogs\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Views\Site\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Views\Coins\" />
     <Folder Include="Views\Blogs\" />
+    <Folder Include="Views\Site\" />
   </ItemGroup>
 </Project>
