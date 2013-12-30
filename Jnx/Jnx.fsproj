@@ -49,12 +49,22 @@
     <Reference Include="Nancy.ViewEngines.Razor">
       <HintPath>..\packages\Nancy.Viewengines.Razor.0.21.1\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net40\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net40\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Database.fs" />
     <Compile Include="ModuleUtils.fs" />
     <Compile Include="BlogsModule.fs" />
     <Compile Include="CoinsModule.fs" />
+    <Compile Include="CountriesModule.fs" />
     <Compile Include="SiteModule.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Program.fs" />
@@ -98,6 +108,12 @@
     <None Include="Views\Site\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="ConnectionStrings.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Views\Countries\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
@@ -105,5 +121,6 @@
     <Folder Include="Views\Coins\" />
     <Folder Include="Views\Blogs\" />
     <Folder Include="Views\Site\" />
+    <Folder Include="Views\Countries\" />
   </ItemGroup>
 </Project>

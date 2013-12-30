@@ -156,3 +156,5 @@ packages/*
 
 # MonoDevelop specific configuration
 *.userprefs
+
+ConnectionStrings.config
