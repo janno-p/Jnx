@@ -13,6 +13,7 @@
 </head>
 <body>
     <div class="navbar navbar-default" role="navigation">
+        <div class="col-sm-1"></div>
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
                 <span class="sr-only">Toggle navigation</span>
@@ -30,7 +31,23 @@
         </div>
     </div>
 
-    @RenderBody()
+    <div class="col-sm-1"></div>
+    <div class="container col-sm-10">
+        @RenderBody()
+
+        <div id="footer-container">
+            <footer>
+                <ul id="credits">
+                    <li>
+                        <a href="http://nancyfx.org/" target="_blank">
+                            <img src="/Content/nancy-logo-icon.jpg" border="0" alt="Made with Nancy." title="Made with Nancy." />
+                        </a>
+                    </li>
+                </ul>
+            </footer>
+        </div>
+    </div>
+    <div class="col-sm-1"></div>
 
     <script src="/Scripts/jquery-2.0.3.min.js"></script>
     <script src="/Scripts/bootstrap.min.js"></script>
