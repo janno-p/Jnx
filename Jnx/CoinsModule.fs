@@ -1,15 +1,10 @@
 namespace Jnx.Modules
 
+open Jnx.Modules.Utils
 open Nancy
 
 type CoinsModule() as this =
     inherit NancyModule()
-
-    let (?<-) (viewBag:obj) (name:string) (value:'T) =
-        (viewBag :?> DynamicDictionary).Add(name, box value)
-
-    let (?) (args:obj) (name:string) =
-        (args :?> DynamicDictionary).[name]
 
     do this.Get.["/coins"] <- (fun _ ->
         this.ViewBag?Title <- "Alejandro"

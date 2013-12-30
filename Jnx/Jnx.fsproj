@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="ModuleUtils.fs" />
+    <Compile Include="BlogsModule.fs" />
     <Compile Include="CoinsModule.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Program.fs" />
@@ -89,10 +91,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config" />
+    <None Include="Views\Blogs\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="Views\Coins\" />
+    <Folder Include="Views\Blogs\" />
   </ItemGroup>
 </Project>
