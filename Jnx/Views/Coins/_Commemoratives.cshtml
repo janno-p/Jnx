@@ -1,13 +1,9 @@
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.Collections.Generic.IEnumerable<object>>
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.String[]>
 
 <section id="commemorative-coins">
-    @if (@Model == null) {
-    <ul class="list-group">
-        <li class="list-group-item">
-            Cras justo odio
-            <span class="label label-success">7</span>
-            <span class="label label-default">14</span>
-        </li>
-    </ul>
+    <ul>
+    @foreach (var year in @Model) {
+        <li><a href="/coins/@year">@year</a></li>
     }
+    </ul>
 </section>
