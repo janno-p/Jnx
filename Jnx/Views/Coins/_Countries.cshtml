@@ -1,1 +1,9 @@
-<h4>Countries</h4>
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Database.Country[]>
+
+<section id="countries">
+    <ul class="list-unstyled">
+    @foreach (var country in @Model) {
+        <li><a href="/coins/@country.Code">@country.Name</a></li>
+    }
+    </ul>
+</section>

@@ -4,13 +4,25 @@
     Layout = "Shared/_Layout.cshtml";
 }
 
-<div id="content">
-    @RenderBody()
-</div>
+<div class="row">
+    <div class="col-md-8" id="content">
+        @RenderBody()
+    </div>
 
-<aside id="sidebar">
-    <h3>Kiirvalikud</h3>
-    @Html.Partial("_Countries")
-    @Html.Partial("_Nominals")
-    @Html.Partial("_Commemoratives", @Model.CommemorativeYears)
-</aside>
+    <div class="col-md-4">
+        <h2><small>Kiirvalikud</small></h2>
+        <div class="row">
+            <div class="col-sm-4">
+                @Html.Partial("_Countries", @Model.Countries)
+            </div>
+
+            <div class="col-sm-4">
+                @Html.Partial("_Nominals", @Model.NominalValues)
+            </div>
+
+            <div class="col-sm-4">
+                @Html.Partial("_Commemoratives", @Model.CommemorativeYears)
+            </div>
+        </div>
+    </div>
+</div>

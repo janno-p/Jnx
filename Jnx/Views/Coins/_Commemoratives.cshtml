@@ -1,7 +1,7 @@
 @inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.String[]>
 
 <section id="commemorative-coins">
-    <ul>
+    <ul class="list-unstyled">
     @foreach (var year in @Model) {
         <li><a href="/coins/@year">@year</a></li>
     }

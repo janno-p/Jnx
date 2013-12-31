@@ -1,1 +1,9 @@
-<h4>Nominals</h4>
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.String[]>
+
+<section id="common-coins">
+    <ul class="list-unstyled">
+    @foreach (var nominalValue in @Model) {
+        <li><a href="/coins/@nominalValue">&euro;@nominalValue</a></li>
+    }
+    </ul>
+</section>
