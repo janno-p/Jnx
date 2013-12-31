@@ -27,3 +27,10 @@ module HtmlHelperExtensions =
         |> append "</a>"
         |> append "</li>"
         |> toHtml
+
+    [<Extension>]
+    let ProgressType (this:HtmlHelpers<'T>) value =
+        match value with
+        | x when x < 50 -> "danger"
+        | x when x < 100 -> "warning"
+        | _ -> "success"

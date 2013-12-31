@@ -8,6 +8,15 @@ type CoinDetails = { CommemorativeYears : string []
                      Countries : Country []
                      NominalValues : string [] }
 
+type CountryStats =
+    { Country : Country
+      CollectedCommon : int
+      CollectedCommemorative : int
+      TotalCommon : int
+      TotalCommemorative : int }
+    member x.CommonPercent with get () = match x.TotalCommon with | 0 -> 100 | _ -> x.CollectedCommon * 100 / x.TotalCommon
+    member x.CommemorativePercent with get () = match x.TotalCommemorative with | 0 -> 100 | _ -> x.CollectedCommemorative * 100 / x.TotalCommemorative
+
 type CoinsModule() as this =
     inherit NancyModule()
 
@@ -19,11 +28,22 @@ type CoinsModule() as this =
     |]
     let nominalValues = [| "2.00"; "1.00"; "0.50"; "0.20"; "0.10"; "0.05"; "0.02"; "0.01" |]
 
-    let details () = { CommemorativeYears = commemorativeYears; Countries = countries; NominalValues = nominalValues }
+    let details (viewData : 'T) : obj [] =
+        [|
+            { CommemorativeYears = commemorativeYears; Countries = countries; NominalValues = nominalValues }
+            viewData
+        |]
+
+    let loadCountryStats () =
+        [|
+            { Country = countries.[0]; CollectedCommon = 8; CollectedCommemorative = 1; TotalCommon = 8; TotalCommemorative = 1 }
+            { Country = countries.[1]; CollectedCommon = 8; CollectedCommemorative = 2; TotalCommon = 8; TotalCommemorative = 7 }
+            { Country = countries.[2]; CollectedCommon = 0; CollectedCommemorative = 0; TotalCommon = 8; TotalCommemorative = 0 }
+        |]
 
     do this.Get.["/coins"] <- (fun _ ->
         this.ViewBag?Title <- "Alejandro"
-        this.View.["Index", details()] :> obj
+        this.View.["Index", loadCountryStats () |> details] :> obj
     )
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->

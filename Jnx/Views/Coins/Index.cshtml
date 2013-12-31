@@ -1,13 +1,39 @@
+@using Jnx.Helpers
 @{
     Layout = "Coins/_Layout.cshtml";
 }
 
 <h1>Euromündid riikide kaupa</h1>
 
-<ul class="list-group">
-    <li class="list-group-item">
-        Cras justo odio
-        <span class="label label-success">7</span>
-        <span class="label label-default">14</span>
-    </li>
-</ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Riik</th>
+            <th>Tavamündid</th>
+            <th>Mälestusmündid</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stats in @Model[1]) {
+        <tr>
+            <td>@stats.Country.Name</td>
+            <td>
+                <div class="progress" title="@stats.CollectedCommon/@stats.TotalCommon">
+                    <div class="progress-bar progress-bar-@Html.ProgressType((int)stats.CommonPercent)" role="progressbar" aria-valuenow="@stats.CollectedCommon" aria-valuemin="0" aria-valuemax="@stats.TotalCommon" style="width: @stats.CommonPercent%">
+                        <span class="sr-only">@stats.CommonPercent% Complete (success)</span>
+                    </div>
+                </div>
+            </td>
+            <td>
+                @if (@stats.TotalCommemorative > 0) {
+                <div class="progress" title="@stats.CollectedCommemorative/@stats.TotalCommemorative">
+                    <div class="progress-bar progress-bar-@Html.ProgressType((int)stats.CommemorativePercent)" role="progressbar" aria-valuenow="@stats.CollectedCommemorative" aria-valuemin="0" aria-valuemax="@stats.TotalCommemorative" style="width: @stats.CommemorativePercent%">
+                        <span class="sr-only">@stats.CommemorativePercent% Complete</span>
+                    </div>
+                </div>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
