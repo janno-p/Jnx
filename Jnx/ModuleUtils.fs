@@ -7,4 +7,4 @@ module Utils =
         (viewBag :?> DynamicDictionary).Add(name, box value)
 
     let (?) (args:obj) (name:string) =
-        (args :?> DynamicDictionary).[name]
+        ((args :?> DynamicDictionary).[name] :?> DynamicDictionaryValue).Value

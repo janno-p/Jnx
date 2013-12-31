@@ -17,6 +17,8 @@ type CountryStats =
     member x.CommonPercent with get () = match x.TotalCommon with | 0 -> 100 | _ -> x.CollectedCommon * 100 / x.TotalCommon
     member x.CommemorativePercent with get () = match x.TotalCommemorative with | 0 -> 100 | _ -> x.CollectedCommemorative * 100 / x.TotalCommemorative
 
+type CommemorativesOfYear = { Year : int }
+
 type CoinsModule() as this =
     inherit NancyModule()
 
@@ -28,11 +30,13 @@ type CoinsModule() as this =
     |]
     let nominalValues = [| "2.00"; "1.00"; "0.50"; "0.20"; "0.10"; "0.05"; "0.02"; "0.01" |]
 
-    let details (viewData : 'T) : obj [] =
-        [|
-            { CommemorativeYears = commemorativeYears; Countries = countries; NominalValues = nominalValues }
-            viewData
-        |]
+    let view viewName (viewData : 'T) =
+        let data =
+            [|
+                { CommemorativeYears = commemorativeYears; Countries = countries; NominalValues = nominalValues }
+                viewData
+            |] : obj []
+        this.View.[viewName, data] :> obj
 
     let loadCountryStats () =
         [|
@@ -43,7 +47,7 @@ type CoinsModule() as this =
 
     do this.Get.["/coins"] <- (fun _ ->
         this.ViewBag?Title <- "Alejandro"
-        this.View.["Index", loadCountryStats () |> details] :> obj
+        loadCountryStats () |> view "Index"
     )
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
@@ -51,7 +55,8 @@ type CoinsModule() as this =
     )
 
     do this.Get.["/coins/(?<year>^\d{4}$)"] <- (fun args ->
-        sprintf "Year of %O" args?year :> obj
+        this.ViewBag?Title <- "Mälestusmündid"
+        { Year = unbox<string> args?year |> int } |> view "Commemorative"
     )
 
     do this.Get.["/coins/(?<nominalValue>(^[12]\.00$)|(^0\.[125]0$)|(^0\.0[125]$))"] <- (fun args ->
