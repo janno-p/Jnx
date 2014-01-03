@@ -8,15 +8,6 @@ type CoinDetails = { CommemorativeYears : string []
                      Countries : Country []
                      NominalValues : string [] }
 
-type CountryStats =
-    { Country : Country
-      CollectedCommon : int
-      CollectedCommemorative : int
-      TotalCommon : int
-      TotalCommemorative : int }
-    member x.CommonPercent with get () = match x.TotalCommon with | 0 -> 100 | _ -> x.CollectedCommon * 100 / x.TotalCommon
-    member x.CommemorativePercent with get () = match x.TotalCommemorative with | 0 -> 100 | _ -> x.CollectedCommemorative * 100 / x.TotalCommemorative
-
 type CommemorativesOfYear = { Year : int }
 
 type CoinsModule() as this =
@@ -38,16 +29,9 @@ type CoinsModule() as this =
             |] : obj []
         this.View.[viewName, data] :> obj
 
-    let loadCountryStats () =
-        [|
-            { Country = countries.[0]; CollectedCommon = 8; CollectedCommemorative = 1; TotalCommon = 8; TotalCommemorative = 1 }
-            { Country = countries.[1]; CollectedCommon = 8; CollectedCommemorative = 2; TotalCommon = 8; TotalCommemorative = 7 }
-            { Country = countries.[2]; CollectedCommon = 0; CollectedCommemorative = 0; TotalCommon = 8; TotalCommemorative = 0 }
-        |]
-
     do this.Get.["/coins"] <- (fun _ ->
         this.ViewBag?Title <- "Alejandro"
-        loadCountryStats () |> view "Index"
+        QueryCountryStats () |> Seq.toArray |> view "Index"
     )
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
