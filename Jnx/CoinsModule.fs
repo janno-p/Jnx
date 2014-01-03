@@ -8,6 +8,7 @@ type CoinDetails = { CommemorativeYears : string []
                      Countries : Country []
                      NominalValues : string [] }
 
+type CoinsOfCountry = { Country : Country }
 type CommemorativesOfYear = { Year : int }
 
 type CoinsModule() as this =
@@ -35,7 +36,7 @@ type CoinsModule() as this =
     )
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
-        sprintf "Country Code: %O" args?countryCode :> obj
+        { Country = QueryCountryByCode args?countryCode } |> view "Country"
     )
 
     do this.Get.["/coins/(?<year>^\d{4}$)"] <- (fun args ->

@@ -38,10 +38,13 @@ let toCountryStats (reader : NpgsqlDataReader) =
 
 let connectionString = ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString
 
-let QueryWithConnectionString (connectionString : string) (toType : NpgsqlDataReader -> 'T) (sql : string) =
+let QueryWithConnectionString (connectionString : string) (toType : NpgsqlDataReader -> 'T) (sql : string) (args : (string * 'U) list) =
     seq {
         use connection = new NpgsqlConnection(connectionString)
         use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
+        args |> Seq.iter (fun (name, value) ->
+            command.Parameters.Add(name, value) |> ignore
+        )
         connection.Open()
         use reader = command.ExecuteReader()
         while reader.Read() do
@@ -61,4 +64,13 @@ let QueryCountryStats () =
                                 (select count(*) from coins_coin where country_id = c.id and collected_at is not null and commemorative_year is not null) as CollectedCommemorative
                          from coins_country c
                          order by c.name asc"
-    Query toCountryStats queryString
+    Query toCountryStats queryString List<string * obj>.Empty
+
+let QueryCountryByCode code =
+    let queryString = @"select c.id as Id,
+                               c.code as Code,
+                               c.name as Name,
+                               c.genitive as Genitive
+                        from coins_country c
+                        where c.code = :code"
+    Query toCountry queryString [("code", code)] |> Seq.head
