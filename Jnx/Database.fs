@@ -73,4 +73,4 @@ let QueryCountryByCode code =
                                c.genitive as Genitive
                         from coins_country c
                         where c.code = :code"
-    Query toCountry queryString [("code", code)] |> Seq.head
+    Query toCountry queryString [("code", code)] |> Seq.tryFind (fun _ -> true)

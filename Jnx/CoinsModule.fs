@@ -36,7 +36,9 @@ type CoinsModule() as this =
     )
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
-        { Country = QueryCountryByCode args?countryCode } |> view "Country"
+        match QueryCountryByCode args?countryCode with
+        | Some country -> { Country = country } |> view "Country"
+        | _ -> 404 :> obj
     )
 
     do this.Get.["/coins/(?<year>^\d{4}$)"] <- (fun args ->
