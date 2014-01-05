@@ -1,9 +1,10 @@
-@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<System.String[]>
+@using System.Globalization
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<decimal[]>
 
 <section id="common-coins">
     <ul class="list-unstyled">
     @foreach (var nominalValue in @Model) {
-        <li><a href="/coins/@nominalValue">&euro;@nominalValue</a></li>
+        <li><a href="/coins/@nominalValue.ToString(CultureInfo.InvariantCulture)">&euro;@nominalValue.ToString("0.00")</a></li>
     }
     </ul>
 </section>

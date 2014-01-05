@@ -122,8 +122,12 @@ type Coin = { Id : int
               CollectedAt : System.DateTime option
               CollectedBy : string option }
 
-type CommonCoin = CommonCoin of Coin * Country
-type CommemorativeCoin = CommemorativeCoin of Coin * Country * int
+type CommonCoin = { Coin : Coin
+                    Country : Country }
+
+type CommemorativeCoin = { Coin : Coin
+                           Country : Country
+                           Year : int }
 
 let toCommemorativeCoin (reader : DynamicDataReader) =
     let coin = { Id = reader?CoinId
@@ -135,7 +139,7 @@ let toCommemorativeCoin (reader : DynamicDataReader) =
                     Code = reader?CountryCode
                     Name = reader?CountryName
                     Genitive = reader?CountryGenitive }
-    CommemorativeCoin(coin, country, reader?CoinCommemorativeYear)
+    { Coin = coin; Country = country; Year = reader?CoinCommemorativeYear }
 
 let QueryCoinsByCommemorativeYear year =
     let qry = @"select  coin.id as CoinId,
@@ -150,7 +154,35 @@ let QueryCoinsByCommemorativeYear year =
                         country.genitive as CountryGenitive
                   from  coins_coin as coin
             inner join  coins_country as country on country.id = coin.country_id
-                 where  coin.commemorative_year = :year"
-    match Query toCommemorativeCoin qry [("year", year)] |> Seq.toArray with
-    | [||] -> None
-    | x -> Some x
+                 where  coin.commemorative_year = :year
+              order by  country.name asc,
+                        coin.id asc"
+    Query toCommemorativeCoin qry [("year", year)]
+
+let toCommonCoin (reader : DynamicDataReader) : CommonCoin =
+    let coin = { Id = reader?CoinId
+                 NominalValue = reader?CoinNominalValue
+                 Image = reader?CoinImage
+                 CollectedAt = reader.Optional?CoinCollectedAt
+                 CollectedBy = reader.Optional?CoinCollectedBy }
+    let country = { Id = reader?CountryId
+                    Code = reader?CountryCode
+                    Name = reader?CountryName
+                    Genitive = reader?CountryGenitive }
+    { Coin = coin; Country = country }
+
+let QueryCoinsByNominalValue nominalValue =
+    let qry = @"select  coin.id as CoinId,
+                        coin.nominal_value as CoinNominalValue,
+                        coin.image as CoinImage,
+                        coin.collected_at as CoinCollectedAt,
+                        coin.collected_by as CoinCollectedBy,
+                        country.id as CountryId,
+                        country.code as CountryCode,
+                        country.name as CountryName,
+                        country.genitive as CountryGenitive
+                  from  coins_coin as coin
+            inner join  coins_country as country on country.id = coin.country_id
+                 where  coin.nominal_value = :value and coin.commemorative_year is null
+              order by  country.name asc"
+    Query toCommonCoin qry [("value", nominalValue)]

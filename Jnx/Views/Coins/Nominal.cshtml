@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "Coins/_Layout.cshtml";
+}
+
+<h1>Euromündid väärtusega &euro;@Model[1].NominalValue.ToString("0.00")</h1>
+
+<ul>
+@foreach (var coin in @Model[1].Coins) {
+    <li>@coin.Country.Name</li>
+}
+</ul>
