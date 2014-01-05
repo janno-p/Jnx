@@ -22,7 +22,7 @@ type CoinsModule() as this =
         let data =
             [| { CommemorativeYears = QueryCommemorativeYears () |> Seq.map (fun x -> x.ToString()) |> Seq.toArray
                  Countries = QueryCountries () |> Seq.toArray
-                 NominalValues = QueryNominalValues () |> Seq.map (fun x -> x.ToString()) |> Seq.toArray }
+                 NominalValues = QueryNominalValues () |> Seq.map (fun x -> x.ToString(System.Globalization.CultureInfo.InvariantCulture)) |> Seq.toArray }
                viewData |] : obj []
         this.View.[viewName, data] :> obj
     let notFound = 404 :> obj

@@ -76,7 +76,7 @@ let QueryNominalValues () =
                          from coins_coin
                          where nominal_value is not null
                          order by nominal_value desc"
-    Query (fun reader -> reader?nominal_value) queryString List<string * obj>.Empty
+    Query (fun reader -> unbox<decimal> reader?nominal_value) queryString List<string * obj>.Empty
 
 let QueryCommemorativeYears () =
     let queryString = @"select distinct commemorative_year
