@@ -8,9 +8,12 @@ type CoinDetails = { CommemorativeYears : string []
                      Countries : Country []
                      NominalValues : string [] }
 
-type CoinsOfCountry = { Country : Country }
+type CoinsOfCountry = { Country : Country
+                        CommonCoins : CommonCoin []
+                        CommemorativeCoins : CommemorativeCoin [] }
+
 type CommemorativesOfYear = { Year : int
-                              Coins : CoinType [] }
+                              Coins : CommemorativeCoin [] }
 
 type CoinsModule() as this =
     inherit NancyModule()
@@ -22,6 +25,7 @@ type CoinsModule() as this =
                  NominalValues = QueryNominalValues () |> Seq.map (fun x -> x.ToString()) |> Seq.toArray }
                viewData |] : obj []
         this.View.[viewName, data] :> obj
+    let notFound = 404 :> obj
 
     do this.Get.["/coins"] <- (fun _ ->
         this.ViewBag?Title <- "Alejandro"
@@ -30,15 +34,19 @@ type CoinsModule() as this =
 
     do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
         match QueryCountryByCode args?countryCode with
-        | Some country -> { Country = country } |> view "Country"
-        | _ -> 404 :> obj
+        | Some country ->
+            this.ViewBag?Title <- sprintf "%s mündid" country.Genitive
+            { Country = country; CommonCoins = [||]; CommemorativeCoins = [||] } |> view "Country"
+        | _ -> notFound
     )
 
     do this.Get.["/coins/(?<year>^\d{4}$)"] <- (fun args ->
-        this.ViewBag?Title <- "Mälestusmündid"
-        match QueryCoinsByCommemorativeYear args?year with
-        | Some coins -> { Year = unbox<string> args?year |> int; Coins = coins } |> view "Commemorative"
-        | _ -> 404 :> obj
+        let year = unbox<string> args?year |> int
+        match QueryCoinsByCommemorativeYear year with
+        | Some coins ->
+            this.ViewBag?Title <- sprintf "Mälestusmündid aastast %d" year
+            { Year = year |> int; Coins = coins } |> view "Commemorative"
+        | _ -> notFound
     )
 
     do this.Get.["/coins/(?<nominalValue>(^[12]\.00$)|(^0\.[125]0$)|(^0\.0[125]$))"] <- (fun args ->

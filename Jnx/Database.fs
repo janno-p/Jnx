@@ -1,20 +1,32 @@
 module Jnx.Database
 
 open Npgsql
+open System
 open System.Configuration
 open System.Data
 
-let (?) (reader : NpgsqlDataReader) (name : string) =
-    unbox reader.[name]
+type DynamicOptionalDataReader(reader : IDataReader) =
+    member private x.Reader = reader
+    static member (?) (r : DynamicOptionalDataReader, name : string) : 'T option =
+        match r.Reader.[name] with
+        | :? System.DBNull -> None
+        | value -> Some (unbox value)
 
-type Country = {
-    Id : int
-    Code : string
-    Name : string
-    Genitive : string
-    }
+type DynamicDataReader(reader : IDataReader) =
+    member private x.Reader = reader
+    member x.Read() = reader.Read()
+    member x.Optional = new DynamicOptionalDataReader(reader)
+    static member (?) (r : DynamicDataReader, name : string) : 'T =
+        unbox r.Reader.[name]
+    interface IDisposable with
+        member x.Dispose() = reader.Dispose()
 
-let toCountry (reader : NpgsqlDataReader) =
+type Country = { Id : int
+                 Code : string
+                 Name : string
+                 Genitive : string }
+
+let toCountry (reader : DynamicDataReader) =
     { Id = reader?Id
       Code = reader?Code
       Name = reader?Name
@@ -26,10 +38,16 @@ type CountryStats =
       CollectedCommemorative : int64
       TotalCommon : int64
       TotalCommemorative : int64 }
-    member x.CommonPercent with get () = match x.TotalCommon with | 0L -> 100 | _ -> int (x.CollectedCommon * 100L / x.TotalCommon)
-    member x.CommemorativePercent with get () = match x.TotalCommemorative with | 0L -> 100 | _ -> int (x.CollectedCommemorative * 100L / x.TotalCommemorative)
+    member x.CommonPercent with get () =
+                            match x.TotalCommon with
+                            | 0L -> 100
+                            | _ -> int (x.CollectedCommon * 100L / x.TotalCommon)
+    member x.CommemorativePercent with get () =
+                                    match x.TotalCommemorative with
+                                    | 0L -> 100
+                                    | _ -> int (x.CollectedCommemorative * 100L / x.TotalCommemorative)
 
-let toCountryStats (reader : NpgsqlDataReader) =
+let toCountryStats (reader : DynamicDataReader) =
     { Country = toCountry reader
       CollectedCommon = reader?CollectedCommon
       TotalCommon = reader?TotalCommon
@@ -38,15 +56,15 @@ let toCountryStats (reader : NpgsqlDataReader) =
 
 let connectionString = ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString
 
-let QueryWithConnectionString (connectionString : string) (toType : NpgsqlDataReader -> 'T) (sql : string) (args : (string * 'U) list) =
+let QueryWithConnectionString (connectionString : string) (toType : DynamicDataReader -> 'T) (sql : string) (args : (string * 'U) list) =
     seq {
         use connection = new NpgsqlConnection(connectionString)
         use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
         args |> Seq.iter (fun (name, value) ->
-            command.Parameters.Add(name, value) |> ignore
+            command.Parameters.AddWithValue(name, value) |> ignore
         )
         connection.Open()
-        use reader = command.ExecuteReader()
+        use reader = new DynamicDataReader(command.ExecuteReader())
         while reader.Read() do
             yield reader |> toType
     }
@@ -104,26 +122,20 @@ type Coin = { Id : int
               CollectedAt : System.DateTime option
               CollectedBy : string option }
 
-type CoinType =
-    | CommonCoin of Coin * Country
-    | CommemorativeCoin of Coin * Country * int
+type CommonCoin = CommonCoin of Coin * Country
+type CommemorativeCoin = CommemorativeCoin of Coin * Country * int
 
-let toCommemorativeCoin (reader : NpgsqlDataReader) =
-    printfn "%O" ((reader?CoinNominalValue).GetType())
-    printfn "%O" ((reader?CoinCollectedAt).GetType())
+let toCommemorativeCoin (reader : DynamicDataReader) =
     let coin = { Id = reader?CoinId
                  NominalValue = reader?CoinNominalValue
                  Image = reader?CoinImage
-                 CollectedAt = match reader?CoinCollectedAt with
-                               | :? System.DBNull -> None
-                               | x -> Some x
-                 CollectedBy = reader?CoinCollectedBy }
+                 CollectedAt = reader.Optional?CoinCollectedAt
+                 CollectedBy = reader.Optional?CoinCollectedBy }
     let country = { Id = reader?CountryId
                     Code = reader?CountryCode
                     Name = reader?CountryName
                     Genitive = reader?CountryGenitive }
-    printfn "%O" ((reader?CoinCommemorativeYear).GetType())
-    CommemorativeCoin(coin, country, int reader?CoinCommemorativeYear)
+    CommemorativeCoin(coin, country, reader?CoinCommemorativeYear)
 
 let QueryCoinsByCommemorativeYear year =
     let qry = @"select  coin.id as CoinId,

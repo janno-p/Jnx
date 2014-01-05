@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{A015733B-AD97-4B84-9B42-0AAB2C3A5691}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
 		.gitignore = .gitignore
+		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,7 +20,8 @@ Global
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Release|x86.ActiveCfg = Release|x86
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Jnx\Jnx.fsproj

@@ -1,4 +1,4 @@
-Jnx
-===
+# Jnx #
 
 Home site (F# version)
+
