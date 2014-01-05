@@ -53,6 +53,29 @@ let QueryWithConnectionString (connectionString : string) (toType : NpgsqlDataRe
 
 let Query toType = QueryWithConnectionString connectionString toType
 
+let QueryNominalValues () =
+    let queryString = @"select distinct nominal_value
+                         from coins_coin
+                         where nominal_value is not null
+                         order by nominal_value desc"
+    Query (fun reader -> reader?nominal_value) queryString List<string * obj>.Empty
+
+let QueryCommemorativeYears () =
+    let queryString = @"select distinct commemorative_year
+                         from coins_coin
+                         where commemorative_year is not null
+                         order by commemorative_year desc"
+    Query (fun reader -> reader?commemorative_year) queryString List<string * obj>.Empty
+
+let QueryCountries () =
+    let queryString = @"select c.id as Id,
+                               c.code as Code,
+                               c.name as Name,
+                               c.genitive as Genitive
+                         from coins_country c
+                         order by c.name asc"
+    Query toCountry queryString List<string * obj>.Empty
+
 let QueryCountryStats () =
     let queryString = @"select c.id as Id,
                                 c.code as Code,
@@ -74,3 +97,48 @@ let QueryCountryByCode code =
                         from coins_country c
                         where c.code = :code"
     Query toCountry queryString [("code", code)] |> Seq.tryFind (fun _ -> true)
+
+type Coin = { Id : int
+              NominalValue : decimal
+              Image : string
+              CollectedAt : System.DateTime option
+              CollectedBy : string option }
+
+type CoinType =
+    | CommonCoin of Coin * Country
+    | CommemorativeCoin of Coin * Country * int
+
+let toCommemorativeCoin (reader : NpgsqlDataReader) =
+    printfn "%O" ((reader?CoinNominalValue).GetType())
+    printfn "%O" ((reader?CoinCollectedAt).GetType())
+    let coin = { Id = reader?CoinId
+                 NominalValue = reader?CoinNominalValue
+                 Image = reader?CoinImage
+                 CollectedAt = match reader?CoinCollectedAt with
+                               | :? System.DBNull -> None
+                               | x -> Some x
+                 CollectedBy = reader?CoinCollectedBy }
+    let country = { Id = reader?CountryId
+                    Code = reader?CountryCode
+                    Name = reader?CountryName
+                    Genitive = reader?CountryGenitive }
+    printfn "%O" ((reader?CoinCommemorativeYear).GetType())
+    CommemorativeCoin(coin, country, int reader?CoinCommemorativeYear)
+
+let QueryCoinsByCommemorativeYear year =
+    let qry = @"select  coin.id as CoinId,
+                        coin.nominal_value as CoinNominalValue,
+                        coin.image as CoinImage,
+                        coin.commemorative_year as CoinCommemorativeYear,
+                        coin.collected_at as CoinCollectedAt,
+                        coin.collected_by as CoinCollectedBy,
+                        country.id as CountryId,
+                        country.code as CountryCode,
+                        country.name as CountryName,
+                        country.genitive as CountryGenitive
+                  from  coins_coin as coin
+            inner join  coins_country as country on country.id = coin.country_id
+                 where  coin.commemorative_year = :year"
+    match Query toCommemorativeCoin qry [("year", year)] |> Seq.toArray with
+    | [||] -> None
+    | x -> Some x
