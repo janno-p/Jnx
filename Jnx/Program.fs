@@ -6,7 +6,7 @@ open Nancy.Hosting.Self
 open System
 open System.Threading
 
-type RunningMode = Daemon | Application
+type RunningMode = Daemon | Application | Migrate | InitDatabase
 
 type CommandLineOptions = {
     RunningMode : RunningMode
@@ -30,6 +30,12 @@ let parseCommandLine args =
                 let port = int p
                 let newOptions = { options with Port = port }
                 parseCommandLineRec xss newOptions
+        | "/M"::xs ->
+            let newOptions = { options with RunningMode = Migrate }
+            parseCommandLineRec xs newOptions
+        | "/I"::xs ->
+            let newOptions = { options with RunningMode = InitDatabase }
+            parseCommandLineRec xs newOptions
         | x::xs ->
             eprintfn "Option '%s' is unrecognized" x
             parseCommandLineRec xs options
@@ -46,15 +52,20 @@ type Bootstrapper() =
 let main args =
     let options = parseCommandLine args
 
-    let uriString = sprintf "http://localhost:%d" options.Port
-    printfn "Starting self hosting on %s" uriString
-
-    use host = new NancyHost(new Uri(uriString))
-    host.Start()
-
     match options.RunningMode with
-    | Daemon -> Thread.Sleep(Timeout.Infinite)
-    | _ -> Console.ReadLine() |> ignore
+    | InitDatabase -> Jnx.DbMigration.Runner.InitDatabase()
+    | Migrate -> Jnx.DbMigration.Runner.RunMigrations()
+    | _ ->
+        let uriString = sprintf "http://localhost:%d" options.Port
+        printfn "Starting self hosting on %s" uriString
 
-    host.Stop()
+        use host = new NancyHost(new Uri(uriString))
+        host.Start()
+
+        match options.RunningMode with
+        | Daemon -> Thread.Sleep(Timeout.Infinite)
+        | _ -> Console.ReadLine() |> ignore
+
+        host.Stop()
+
     0

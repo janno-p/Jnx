@@ -7,7 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
+EndProject
+Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx.DbMigration", "Jnx.DbMigration\Jnx.DbMigration.fsproj", "{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,11 +21,17 @@ Global
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Debug|x86.Build.0 = Debug|x86
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Release|x86.ActiveCfg = Release|x86
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Release|x86.Build.0 = Release|x86
+		{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}.Debug|x86.ActiveCfg = Debug|x86
+		{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}.Debug|x86.Build.0 = Debug|x86
+		{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}.Release|x86.ActiveCfg = Release|x86
+		{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Jnx\Jnx.fsproj
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
