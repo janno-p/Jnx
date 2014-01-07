@@ -145,10 +145,4 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Jnx.DbMigration\Jnx.DbMigration.fsproj">
-      <Project>{8CE9F8ED-69C5-46D2-9771-03C7DDA6EF62}</Project>
-      <Name>Jnx.DbMigration</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
