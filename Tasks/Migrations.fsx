@@ -3,7 +3,7 @@
 
 #r "FakeLib.dll"
 #r "Npgsql.dll"
-#r "System.Configuration.dll"
+#r "System.Data.dll"
 
 open Fake
 open Npgsql
@@ -13,18 +13,29 @@ let OpenConnection () =
     let x = readConfig(__SOURCE_DIRECTORY__ @@ "../Jnx/ConnectionStrings.config")
     match x.SelectSingleNode(sprintf "//connectionStrings/add[@name='%s']/@connectionString" connectionStringName) with
     | null -> failwith (sprintf @"ConnectionString named ""%s"" was not found in configuration settings." connectionStringName)
-    | node -> trace node.Value
+    | node ->
+        let connection = new NpgsqlConnection(node.Value)
+        connection.Open()
+        connection
 
+let IsInitialized (connection : NpgsqlConnection) =
+    use command = connection.CreateCommand()
+    command.CommandText <- @"SELECT COUNT(*) FROM information_schema.tables WHERE table_catalog=:schemaname AND table_name='migrations'"
+    command.Parameters.Add("schemaname", connection.Database) |> ignore
+    unbox<int64> (command.ExecuteScalar()) > 0L
 
-Target "Test" (fun _ ->
-    trace "Testing stuff ..."
-    OpenConnection()
+Target "Init" (fun _ ->
+    use connection = OpenConnection()
+    if IsInitialized connection then
+        failwith "Schema is already initialized."
+    trace "Yeppi!!"
 )
 
-Target "Deploy" (fun _ ->
-    trace "Heavy deploy action"
+Target "Migrate" (fun _ ->
+    use connection = OpenConnection()
+    if not (IsInitialized connection) then
+        run "Init"
+    trace "Yeppi!!"
 )
 
-"Test" ==> "Deploy"
-
-Run "Deploy"
+RunTargetOrDefault "Migrate"
