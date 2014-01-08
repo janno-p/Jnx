@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{B03017E5-636F-4A73-8599-106B659E57FB}"
 	ProjectSection(SolutionItems) = preProject
 		Tasks\Migrations.fsx = Tasks\Migrations.fsx
+		Tasks\Deploy.fsx = Tasks\Deploy.fsx
 	EndProjectSection
 EndProject
 Global
