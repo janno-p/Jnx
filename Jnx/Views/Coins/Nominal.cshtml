@@ -4,8 +4,12 @@
 
 <h1>Euromündid väärtusega &euro;@Model[1].NominalValue.ToString("0.00")</h1>
 
-<ul>
+<div class="row">
 @foreach (var coin in @Model[1].Coins) {
-    <li>@coin.Country.Name</li>
+    <div class="col-sm-3 col-xs-6">
+        <a href="#" class="thumbnail">
+            <img src="/Content/@coin.Coin.ImageUri" title="@coin.Country.Name" alt="@coin.Country.Name" />
+        </a>
+    </div>
 }
-</ul>
+</div>

@@ -122,11 +122,17 @@ let QueryCountryByCode code =
                         where c.code = :code"
     Query toCountry queryString [("code", code)] |> Seq.tryFind (fun _ -> true)
 
-type Coin = { Id : int
-              NominalValue : decimal
-              Image : string
-              CollectedAt : System.DateTime option
-              CollectedBy : string option }
+type Coin =
+    { Id : int
+      NominalValue : decimal
+      Image : string
+      CollectedAt : System.DateTime option
+      CollectedBy : string option }
+    member x.ImageUri
+        with get () =
+            match x.CollectedAt with
+            | Some _ -> x.Image.Insert(x.Image.Length - 4, "_collected")
+            | None -> x.Image.Insert(x.Image.Length - 4, "_thumb")
 
 type CommonCoin = { Coin : Coin
                     Country : Country }
