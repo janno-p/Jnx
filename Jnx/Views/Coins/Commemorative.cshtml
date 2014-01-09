@@ -4,4 +4,12 @@
 
 <h1>Mälestusmündid aastast @Model[1].Year</h1>
 
-
+<div class="row">
+@foreach (var coin in @Model[1].Coins) {
+    <div class="col-sm-3 col-xs-6">
+        <a href="#" class="thumbnail">
+            <img src="/Content/@coin.Coin.ImageUri" title="@coin.Country.Name" alt="@coin.Country.Name" />
+        </a>
+    </div>
+}
+</div>

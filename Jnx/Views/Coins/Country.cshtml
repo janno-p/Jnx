@@ -3,3 +3,33 @@
 }
 
 <h1>@Model[1].Country.Genitive euromündid</h1>
+
+@if (@Model[1].CommonCoins.Length < 1 && @Model[1].CommemorativeCoins.Length < 1) {
+    <div class="alert alert-danger">Ei leitud infot ühegi mündi kohta.</div>
+}
+
+@if (@Model[1].CommonCoins.Length > 0) {
+    <h2>@Model[1].Country.Genitive üldised käibemündid</h2>
+    <div class="row">
+    @foreach (var coin in @Model[1].CommonCoins) {
+        <div class="col-sm-3 col-xs-6">
+            <a href="#" class="thumbnail">
+                <img src="/Content/@coin.Coin.ImageUri" title="&euro;@coin.Coin.NominalValue.ToString("0.00")" alt="&euro;@coin.Coin.NominalValue.ToString("0.00")" />
+            </a>
+        </div>
+    }
+    </div>
+}
+
+@if (@Model[1].CommemorativeCoins.Length > 0) {
+    <h2>@Model[1].Country.Genitive mälestusmündid</h2>
+    <div class="row">
+    @foreach (var coin in @Model[1].CommemorativeCoins) {
+        <div class="col-sm-3 col-xs-6">
+            <a href="#" class="thumbnail">
+                <img src="/Content/@coin.Coin.ImageUri" title="@coin.Year" alt="&euro;@coin.Year" />
+            </a>
+        </div>
+    }
+    </div>
+}

@@ -198,3 +198,18 @@ let QueryCoinsByNominalValue nominalValue =
                  where  coin.nominal_value = :value and coin.commemorative_year is null
               order by  country.name asc"
     Query toCommonCoin qry [("value", nominalValue)]
+
+(*
+let QueryCoinsOfCountry<'T> (country : Country) =
+    let qry = @"select  coin.id as CoinId,
+                        coin.nominal_value as CoinNominalValue,
+                        coin.image as CoinImage,
+                        coin.collected_at as CoinCollectedAt,
+                        coin.collected_by as CoinCollectedBy,
+                        coin.commemorative_year as CoinCommemorativeYear
+                  from  coins_coin as coin
+                 where  coin.country.id = :country_id
+              order by  coin.commemorative_year desc,
+                        coin.nominal_value desc"
+    Query toCoin qry [("country_id", country.Id)]
+*)
