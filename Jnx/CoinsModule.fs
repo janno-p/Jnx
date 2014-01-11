@@ -39,8 +39,12 @@ type CoinsModule() as this =
         let countryCode = unbox<string> args?countryCode
         match QueryCountryByCode countryCode with
         | Some country ->
+            let commonCoins, commemorativeCoins = QueryCoinsOfCountry country
             this.ViewBag?Title <- sprintf "%s mündid" country.Genitive
-            { Country = country; CommonCoins = [||]; CommemorativeCoins = [||] } |> view "Country"
+            { Country = country
+              CommonCoins = commonCoins |> Seq.toArray
+              CommemorativeCoins = commemorativeCoins |> Seq.toArray }
+            |> view "Country"
         | _ -> notFound
     )
 

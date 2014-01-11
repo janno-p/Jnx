@@ -67,7 +67,7 @@ let QueryWithConnectionString (connectionString : string) (toType : DynamicDataR
         use connection = new NpgsqlConnection(connectionString)
         use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
         args |> Seq.iter (fun (name, value) ->
-            command.Parameters.AddWithValue(name, value) |> ignore
+            command.Parameters.Add(name, value) |> ignore
         )
         connection.Open()
         use reader = new DynamicDataReader(command.ExecuteReader())
@@ -183,6 +183,22 @@ let toCommonCoin (reader : DynamicDataReader) : CommonCoin =
                     Genitive = reader?CountryGenitive }
     { Coin = coin; Country = country }
 
+let toCommonCoinWithCountry country (reader : DynamicDataReader) : CommonCoin =
+    let coin = { Id = reader?CoinId
+                 NominalValue = reader?CoinNominalValue
+                 Image = reader?CoinImage
+                 CollectedAt = reader.Optional?CoinCollectedAt
+                 CollectedBy = reader.Optional?CoinCollectedBy }
+    { Coin = coin; Country = country }
+
+let toCommemorativeCoinWithCountry country (reader : DynamicDataReader) =
+    let coin = { Id = reader?CoinId
+                 NominalValue = reader?CoinNominalValue
+                 Image = reader?CoinImage
+                 CollectedAt = reader.Optional?CoinCollectedAt
+                 CollectedBy = reader.Optional?CoinCollectedBy }
+    { Coin = coin; Country = country; Year = reader?CoinCommemorativeYear }
+
 let QueryCoinsByNominalValue nominalValue =
     let qry = @"select  coin.id as CoinId,
                         coin.nominal_value as CoinNominalValue,
@@ -199,8 +215,12 @@ let QueryCoinsByNominalValue nominalValue =
               order by  country.name asc"
     Query toCommonCoin qry [("value", nominalValue)]
 
-(*
-let QueryCoinsOfCountry<'T> (country : Country) =
+let toCoin country (reader : DynamicDataReader) : CommonCoin option * CommemorativeCoin option =
+    match reader.Optional?CoinCommemorativeYear with
+    | Some year -> (None, Some (toCommemorativeCoinWithCountry country reader))
+    | _ -> (Some (toCommonCoinWithCountry country reader), None)
+
+let QueryCoinsOfCountry (country : Country) =
     let qry = @"select  coin.id as CoinId,
                         coin.nominal_value as CoinNominalValue,
                         coin.image as CoinImage,
@@ -208,8 +228,9 @@ let QueryCoinsOfCountry<'T> (country : Country) =
                         coin.collected_by as CoinCollectedBy,
                         coin.commemorative_year as CoinCommemorativeYear
                   from  coins_coin as coin
-                 where  coin.country.id = :country_id
+                 where  coin.country_id = :country_id
               order by  coin.commemorative_year desc,
                         coin.nominal_value desc"
-    Query toCoin qry [("country_id", country.Id)]
-*)
+    let toCoin = toCoin country
+    let coins = Query toCoin qry [("country_id", country.Id)] |> Seq.toList |> List.unzip
+    (fst coins |> List.choose (fun x -> x), snd coins |> List.choose (fun x -> x))
