@@ -5,12 +5,6 @@ open System
 open System.Configuration
 open System.Data
 
-let x = query {
-    for x in [1; 2; 3] do
-    select x
-    count
-}
-
 type DynamicOptionalDataReader(reader : IDataReader) =
     member private x.Reader = reader
     static member (?) (r : DynamicOptionalDataReader, name : string) : 'T option =
