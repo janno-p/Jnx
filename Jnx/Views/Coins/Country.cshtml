@@ -9,7 +9,7 @@
 }
 
 @if (@Model[1].CommonCoins.Length > 0) {
-    <h2>@Model[1].Country.Genitive üldised käibemündid</h2>
+    <h2>Üldised käibemündid</h2>
     <div class="row">
     @foreach (var coin in @Model[1].CommonCoins) {
         <div class="col-sm-3 col-xs-6">
@@ -22,7 +22,7 @@
 }
 
 @if (@Model[1].CommemorativeCoins.Length > 0) {
-    <h2>@Model[1].Country.Genitive mälestusmündid</h2>
+    <h2>Mälestusmündid</h2>
     <div class="row">
     @foreach (var coin in @Model[1].CommemorativeCoins) {
         <div class="col-sm-3 col-xs-6">

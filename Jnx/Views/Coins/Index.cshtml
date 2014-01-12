@@ -16,7 +16,7 @@
     <tbody>
         @foreach (var stats in @Model[1]) {
         <tr>
-            <td>@stats.Country.Name</td>
+            <td><a href="/coins/@stats.Country.Code">@stats.Country.Name</a></td>
             <td>
                 <div class="progress" title="@stats.CollectedCommon/@stats.TotalCommon">
                     <div class="progress-bar progress-bar-@Html.ProgressType((int)stats.CommonPercent)" role="progressbar" aria-valuenow="@stats.CollectedCommon" aria-valuemin="0" aria-valuemax="@stats.TotalCommon" style="width: @stats.CommonPercent%">
