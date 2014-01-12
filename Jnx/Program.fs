@@ -39,13 +39,12 @@ let parseCommandLine args =
 type Bootstrapper() =
     inherit DefaultNancyBootstrapper()
 
+    override this.ApplicationStartup (_, pipelines) =
+        DiagnosticsHook.Disable(pipelines)
+
     override this.ConfigureConventions conventions =
         base.ConfigureConventions conventions
         conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("Scripts", "Scripts", "js"))
-
-    override this.DiagnosticsConfiguration
-        with get () =
-            new DiagnosticsConfiguration(Password = "tere")
 
 [<EntryPoint>]
 let main args =
