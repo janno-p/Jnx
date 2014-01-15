@@ -13,7 +13,7 @@
     <div class="row">
     @foreach (var coin in @Model[1].CommonCoins) {
         <div class="col-sm-3 col-xs-6">
-            <a href="#" class="thumbnail">
+            <a href="/coins/@coin.Coin.Id/edit" class="thumbnail">
                 <img src="/Content/@coin.Coin.ImageUri" title="&euro;@coin.Coin.NominalValue.ToString("0.00")" alt="&euro;@coin.Coin.NominalValue.ToString("0.00")" />
             </a>
         </div>
@@ -26,7 +26,7 @@
     <div class="row">
     @foreach (var coin in @Model[1].CommemorativeCoins) {
         <div class="col-sm-3 col-xs-6">
-            <a href="#" class="thumbnail">
+            <a href="/coins/@coin.Coin.Id/edit" class="thumbnail">
                 <img src="/Content/@coin.Coin.ImageUri" title="@coin.Year" alt="&euro;@coin.Year" />
             </a>
         </div>

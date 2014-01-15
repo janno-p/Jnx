@@ -65,3 +65,8 @@ type CoinsModule() as this =
             this.ViewBag?Title <- sprintf "Euromündid väärtusega €%.2M" nominalValue
             { NominalValue = nominalValue; Coins = coins } |> view "Nominal"
     )
+
+    do this.Get.["/coins/(?<id>^\d+$)/edit"] <- (fun args ->
+        let id = unbox<string> args?id |> int
+        sprintf "Editing coin #%d" id :> obj
+    )
