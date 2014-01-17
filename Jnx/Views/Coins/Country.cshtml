@@ -2,7 +2,9 @@
     Layout = "Coins/_Layout.cshtml";
 }
 
-<h1>@Model[1].Country.Genitive euromündid</h1>
+<div class="page-header">
+    <h1>@Model[1].Country.Genitive euromündid</h1>
+</div>
 
 @if (@Model[1].CommonCoins.Length < 1 && @Model[1].CommemorativeCoins.Length < 1) {
     <div class="alert alert-danger">Ei leitud infot ühegi mündi kohta.</div>
@@ -13,8 +15,8 @@
     <div class="row">
     @foreach (var coin in @Model[1].CommonCoins) {
         <div class="col-sm-3 col-xs-6">
-            <a href="/coins/@coin.Coin.Id/edit" class="thumbnail">
-                <img src="/Content/@coin.Coin.ImageUri" title="&euro;@coin.Coin.NominalValue.ToString("0.00")" alt="&euro;@coin.Coin.NominalValue.ToString("0.00")" />
+            <a href="/coins/@coin.Id/edit" class="thumbnail">
+                <img src="/Content/@coin.ImageUri" title="&euro;@coin.NominalValue.ToString("0.00")" alt="&euro;@coin.NominalValue.ToString("0.00")" />
             </a>
         </div>
     }
@@ -26,8 +28,8 @@
     <div class="row">
     @foreach (var coin in @Model[1].CommemorativeCoins) {
         <div class="col-sm-3 col-xs-6">
-            <a href="/coins/@coin.Coin.Id/edit" class="thumbnail">
-                <img src="/Content/@coin.Coin.ImageUri" title="@coin.Year" alt="&euro;@coin.Year" />
+            <a href="/coins/@coin.Id/edit" class="thumbnail">
+                <img src="/Content/@coin.ImageUri" title="@coin.Year" alt="&euro;@coin.Year" />
             </a>
         </div>
     }

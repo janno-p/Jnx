@@ -1,6 +1,7 @@
 namespace Jnx.Modules
 
-open Jnx.Database
+open Jnx.Database.Types
+open Jnx.Database.Queries
 open Jnx.Modules.Utils
 open Nancy
 
@@ -13,10 +14,10 @@ type CoinsOfCountry = { Country : Country
                         CommemorativeCoins : CommemorativeCoin [] }
 
 type CoinsWithNominalValue = { NominalValue : decimal
-                               Coins : CommonCoin [] }
+                               Coins : CoinOfCountry [] }
 
 type CommemorativesOfYear = { Year : int
-                              Coins : CommemorativeCoin [] }
+                              Coins : CoinOfCountry [] }
 
 type CoinsModule() as this =
     inherit NancyModule()
@@ -42,8 +43,8 @@ type CoinsModule() as this =
             let commonCoins, commemorativeCoins = QueryCoinsOfCountry country
             this.ViewBag?Title <- sprintf "%s mündid" country.Genitive
             { Country = country
-              CommonCoins = commonCoins |> Seq.toArray
-              CommemorativeCoins = commemorativeCoins |> Seq.toArray }
+              CommonCoins = commonCoins |> Seq.map (fun x -> x :?> CommonCoin) |> Seq.toArray
+              CommemorativeCoins = commemorativeCoins |> Seq.map (fun x -> x :?> CommemorativeCoin) |> Seq.toArray }
             |> view "Country"
         | _ -> notFound
     )

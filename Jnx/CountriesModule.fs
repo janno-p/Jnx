@@ -1,6 +1,7 @@
 namespace Jnx.Modules
 
 open Jnx.Database
+open Jnx.Database.Conversions
 open Jnx.Modules.Utils
 open Nancy
 

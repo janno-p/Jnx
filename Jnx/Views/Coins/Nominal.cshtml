@@ -2,7 +2,9 @@
     Layout = "Coins/_Layout.cshtml";
 }
 
-<h1>Euromündid väärtusega &euro;@Model[1].NominalValue.ToString("0.00")</h1>
+<div class="page-header">
+    <h1>Euromündid väärtusega &euro;@Model[1].NominalValue.ToString("0.00")</h1>
+</div>
 
 <div class="row">
 @foreach (var coin in @Model[1].Coins) {
