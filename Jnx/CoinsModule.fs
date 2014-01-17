@@ -67,6 +67,5 @@ type CoinsModule() as this =
     )
 
     do this.Get.["/coins/(?<id>^\d+$)/edit"] <- (fun args ->
-        let id = unbox<string> args?id |> int
-        sprintf "Editing coin #%d" id :> obj
+        null :> obj |> view "Edit"
     )

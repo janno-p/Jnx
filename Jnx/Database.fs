@@ -228,3 +228,6 @@ let QueryCoinsOfCountry (country : Country) =
     let toCoin = toCoin country
     let coins = Query toCoin qry [("country_id", country.Id)] |> Seq.toList |> List.unzip
     (fst coins |> List.choose (fun x -> x), snd coins |> List.choose (fun x -> x))
+
+let QueryCoinById id =
+    ()
