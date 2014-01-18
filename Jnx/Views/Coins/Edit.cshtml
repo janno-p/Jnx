@@ -1,12 +1,14 @@
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Modules.ViewData<Jnx.Database.Types.Coin>>
+@using Jnx.Helpers
 @{
     Layout = "Coins/_Layout.cshtml";
 }
 
 <div class="page-header">
-    @if (@Model[1].Coin is Jnx.Database.Types.CommonCoin) {
-        <h1>@Model[1].Country.Genitive €@Model[1].Coin.NominalValue käibemünt</h1>
+    @if (Html.IsCommonCoin(Model.ViewDetails)) {
+        <h1>@Model.ViewDetails.Country.Genitive @Html.Raw(Html.CoinNominalValue(Model.ViewDetails)) käibemünt</h1>
     } else {
-        <h1>@Model[1].Country.Genitive @Model[1].Coin.Year mälestusmünt</h1>
+        <h1>@Model.ViewDetails.Country.Genitive @Html.CoinCommemorativeYear(Model.ViewDetails) mälestusmünt</h1>
     }
 </div>
 

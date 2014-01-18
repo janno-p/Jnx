@@ -48,3 +48,9 @@ module HtmlHelperExtensions =
         match coin.Type with
         | CommemorativeCoin (year, _) -> year.ToString()
         | _ -> ""
+
+    [<Extension>]
+    let IsCommonCoin (this : HtmlHelpers<'T>) (coin : Coin) =
+        match coin.Type with
+        | CommonCoin _ -> true
+        | _ -> false
