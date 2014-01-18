@@ -5,30 +5,38 @@ open Jnx.Database.Queries
 open Jnx.Modules.Utils
 open Nancy
 
-type CoinDetails = { CommemorativeYears : string []
-                     Countries : Country []
-                     NominalValues : decimal [] }
+type LayoutDetails =
+    { CommemorativeYears : string []
+      Countries : Country []
+      NominalValues : decimal [] }
+
+type ViewData<'T> =
+    { LayoutDetails : LayoutDetails
+      ViewDetails : 'T }
 
 type CoinsOfCountry = { Country : Country
-                        CommonCoins : CommonCoin []
-                        CommemorativeCoins : CommemorativeCoin [] }
+                        CommonCoins : Coin []
+                        CommemorativeCoins : Coin [] }
 
 type CoinsWithNominalValue = { NominalValue : decimal
-                               Coins : CoinOfCountry [] }
+                               Coins : Coin [] }
 
 type CommemorativesOfYear = { Year : int
-                              Coins : CoinOfCountry [] }
+                              Coins : Coin [] }
 
 type CoinsModule() as this =
     inherit NancyModule()
 
+    let loadLayoutDetails () =
+        { CommemorativeYears = QueryCommemorativeYears() |> Seq.map (fun x -> x.ToString()) |> Seq.toArray
+          Countries = QueryCountries() |> Seq.toArray
+          NominalValues = QueryNominalValues() |> Seq.toArray }
+
     let view viewName (viewData : 'T) =
-        let data =
-            [| { CommemorativeYears = QueryCommemorativeYears () |> Seq.map (fun x -> x.ToString()) |> Seq.toArray
-                 Countries = QueryCountries () |> Seq.toArray
-                 NominalValues = QueryNominalValues () |> Seq.toArray }
-               viewData |] : obj []
-        this.View.[viewName, data] :> obj
+        let model = { LayoutDetails = loadLayoutDetails()
+                      ViewDetails = viewData }
+        this.View.[viewName, model] :> obj
+
     let notFound = 404 :> obj
 
     do this.Get.["/coins"] <- (fun _ ->
@@ -43,8 +51,8 @@ type CoinsModule() as this =
             let commonCoins, commemorativeCoins = QueryCoinsOfCountry country
             this.ViewBag?Title <- sprintf "%s mündid" country.Genitive
             { Country = country
-              CommonCoins = commonCoins |> Seq.map (fun x -> x :?> CommonCoin) |> Seq.toArray
-              CommemorativeCoins = commemorativeCoins |> Seq.map (fun x -> x :?> CommemorativeCoin) |> Seq.toArray }
+              CommonCoins = commonCoins |> Seq.toArray
+              CommemorativeCoins = commemorativeCoins |> Seq.toArray }
             |> view "Country"
         | _ -> notFound
     )
@@ -68,5 +76,8 @@ type CoinsModule() as this =
     )
 
     do this.Get.["/coins/(?<id>^\d+$)/edit"] <- (fun args ->
-        null :> obj |> view "Edit"
+        let id = unbox<string> args?id |> int
+        match QueryCoinById id with
+        | Some coin -> coin |> view "Edit"
+        | _ -> notFound
     )

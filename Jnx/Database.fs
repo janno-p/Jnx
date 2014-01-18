@@ -39,36 +39,28 @@ let QueryWithConnectionString (connectionString : string) (toType : DynamicDataR
 let Query toType = QueryWithConnectionString connectionString toType
 
 module Types =
-    [<AbstractClass>]
-    type Coin () =
-        member val Id = 0 with get, set
-        member val NominalValue = 0M with get, set
-        member val Image = "" with get, set
-        member val CollectedAt = None : DateTime option with get, set
-        member val CollectedBy = None : string option with get, set
-        member x.ImageUri
-            with get () =
-                match x.CollectedAt with
-                | Some _ -> x.Image.Insert(x.Image.Length - 4, "_collected")
-                | None -> x.Image.Insert(x.Image.Length - 4, "_thumb")
+    type Country =
+        { Id : int
+          Code : string
+          Name : string
+          Genitive : string }
 
-    type CommonCoin () =
-        inherit Coin ()
+    type CoinType =
+        | CommonCoin of decimal
+        | CommemorativeCoin of int * bool
 
-    type CommemorativeCoin () =
-        inherit Coin ()
-        member val Year = 0 with get, set
-        member val IsCommon = false with get, set
-
-    type Country = { Id : int
-                     Code : string
-                     Name : string
-                     Genitive : string }
-
-    type CoinOfCountry = {
-        Coin : Coin
-        Country : Country
-    }
+    type Coin =
+        { Id : int
+          Type : CoinType
+          Country : Country
+          Image : string
+          CollectedAt : DateTime option
+          CollectedBy : string option }
+        member this.ImageUri
+            with get() =
+                match this.CollectedAt with
+                | Some _ -> this.Image.Insert(this.Image.Length - 4, "_collected")
+                | None -> this.Image.Insert(this.Image.Length - 4, "_thumb")
 
     type CountryStats =
         { Country : Country
@@ -102,19 +94,16 @@ module Conversions =
           TotalCommemorative = reader?TotalCommemorative }
 
     let toCoin (reader : DynamicDataReader) =
-        let coin =
+        let coinType =
             match reader.Optional?CoinCommemorativeYear with
-            | Some year -> new CommemorativeCoin(Year = year) :> Coin
-            | _ -> new CommonCoin() :> Coin
-        coin.Id <- reader?CoinId
-        coin.NominalValue <- reader?CoinNominalValue
-        coin.Image <- reader?CoinImage
-        coin.CollectedAt <- reader.Optional?CoinCollectedAt
-        coin.CollectedBy <- reader.Optional?CoinCollectedBy
-        coin
-
-    let toCoinOfCountry (reader : DynamicDataReader) =
-        { Coin = toCoin reader; Country = toCountry reader }
+            | Some year -> CommemorativeCoin (year, false)
+            | _ -> CommonCoin reader?CoinNominalValue
+        { Id = reader?CoinId
+          Type = coinType
+          Image = reader?CoinImage
+          CollectedAt = reader.Optional?CoinCollectedAt
+          CollectedBy = reader.Optional?CoinCollectedBy
+          Country = toCountry reader }
 
 module Queries =
     let QueryCountries () =
@@ -160,11 +149,11 @@ module Queries =
                             country.name as CountryName,
                             country.genitive as CountryGenitive
                       from  coins_coin as coin
-                inner join  coins_country as country on country.id = coin.country_id
+                            inner join  coins_country as country on country.id = coin.country_id
                      where  coin.commemorative_year = :year
                   order by  country.name asc,
                             coin.id asc"
-        Query Conversions.toCoinOfCountry qry [("year", year)]
+        Query Conversions.toCoin qry [("year", year)]
 
     let QueryCoinsByNominalValue nominalValue =
         let qry = @"select  coin.id as CoinId,
@@ -178,10 +167,10 @@ module Queries =
                             country.name as CountryName,
                             country.genitive as CountryGenitive
                       from  coins_coin as coin
-                inner join  coins_country as country on country.id = coin.country_id
+                            inner join  coins_country as country on country.id = coin.country_id
                      where  coin.nominal_value = :value and coin.commemorative_year is null
                   order by  country.name asc"
-        Query Conversions.toCoinOfCountry qry [("value", nominalValue)]
+        Query Conversions.toCoin qry [("value", nominalValue)]
 
     let QueryCoinsOfCountry (country : Country) =
         let qry = @"select  coin.id as CoinId,
@@ -189,13 +178,19 @@ module Queries =
                             coin.image as CoinImage,
                             coin.collected_at as CoinCollectedAt,
                             coin.collected_by as CoinCollectedBy,
-                            coin.commemorative_year as CoinCommemorativeYear
+                            coin.commemorative_year as CoinCommemorativeYear,
+                            country.id as CountryId,
+                            country.code as CountryCode,
+                            country.name as CountryName,
+                            country.genitive as CountryGenitive
                       from  coins_coin as coin
-                     where  coin.country_id = :country_id
+                            inner join  coins_country as country on country.id = coin.country_id
+                     where  country.id = :country_id
                   order by  coin.commemorative_year desc,
                             coin.nominal_value desc"
-        let coins = Query Conversions.toCoin qry [("country_id", country.Id)] |> Seq.toList
-        (coins |> List.filter (fun x -> x :? CommonCoin), coins |> List.filter (fun x -> x :? CommemorativeCoin))
+        Query Conversions.toCoin qry [("country_id", country.Id)]
+        |> Seq.toList
+        |> List.partition (fun x -> match x.Type with | CommonCoin _ -> true | _ -> false)
 
     let QueryCoinById id =
         let qry = @"select  coin.id as CoinId,
@@ -211,7 +206,7 @@ module Queries =
                       from  coins_coin as coin
                             inner join  coins_country as country on country.id = coin.country_id
                      where  coin.id = :id"
-        Query Conversions.toCoinOfCountry qry [("id", id)] |> Seq.tryFind (fun _ -> true)
+        Query Conversions.toCoin qry [("id", id)] |> Seq.tryFind (fun _ -> true)
 
     let QueryNominalValues () =
         let qry = @"select distinct  nominal_value

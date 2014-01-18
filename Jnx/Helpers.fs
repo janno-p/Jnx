@@ -1,5 +1,6 @@
 namespace Jnx.Helpers
 
+open Jnx.Database.Types
 open Nancy.ViewEngines.Razor
 open System
 open System.Text
@@ -34,3 +35,16 @@ module HtmlHelperExtensions =
         | x when x < 50 -> "danger"
         | x when x < 100 -> "warning"
         | _ -> "success"
+
+    [<Extension>]
+    let CoinNominalValue (this : HtmlHelpers<'T>) (coin : Coin) =
+        match coin.Type with
+        | CommonCoin nominalValue -> nominalValue
+        | _ -> 2M
+        |> sprintf "&euro;%.2f"
+
+    [<Extension>]
+    let CoinCommemorativeYear (this : HtmlHelpers<'T>) (coin : Coin) =
+        match coin.Type with
+        | CommemorativeCoin (year, _) -> year.ToString()
+        | _ -> ""

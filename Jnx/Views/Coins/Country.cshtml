@@ -1,35 +1,37 @@
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Modules.ViewData<Jnx.Modules.CoinsOfCountry>>
+@using Jnx.Helpers
 @{
     Layout = "Coins/_Layout.cshtml";
 }
 
 <div class="page-header">
-    <h1>@Model[1].Country.Genitive euromündid</h1>
+    <h1>@Model.ViewDetails.Country.Genitive euromündid</h1>
 </div>
 
-@if (@Model[1].CommonCoins.Length < 1 && @Model[1].CommemorativeCoins.Length < 1) {
+@if (@Model.ViewDetails.CommonCoins.Length < 1 && @Model.ViewDetails.CommemorativeCoins.Length < 1) {
     <div class="alert alert-danger">Ei leitud infot ühegi mündi kohta.</div>
 }
 
-@if (@Model[1].CommonCoins.Length > 0) {
+@if (@Model.ViewDetails.CommonCoins.Length > 0) {
     <h2>Üldised käibemündid</h2>
     <div class="row">
-    @foreach (var coin in @Model[1].CommonCoins) {
+    @foreach (var coin in @Model.ViewDetails.CommonCoins) {
         <div class="col-sm-3 col-xs-6">
             <a href="/coins/@coin.Id/edit" class="thumbnail">
-                <img src="/Content/@coin.ImageUri" title="&euro;@coin.NominalValue.ToString("0.00")" alt="&euro;@coin.NominalValue.ToString("0.00")" />
+                <img src="/Content/@coin.ImageUri" title="@Html.CoinNominalValue(coin)" alt="@Html.CoinNominalValue(coin)" />
             </a>
         </div>
     }
     </div>
 }
 
-@if (@Model[1].CommemorativeCoins.Length > 0) {
+@if (@Model.ViewDetails.CommemorativeCoins.Length > 0) {
     <h2>Mälestusmündid</h2>
     <div class="row">
-    @foreach (var coin in @Model[1].CommemorativeCoins) {
+    @foreach (var coin in @Model.ViewDetails.CommemorativeCoins) {
         <div class="col-sm-3 col-xs-6">
             <a href="/coins/@coin.Id/edit" class="thumbnail">
-                <img src="/Content/@coin.ImageUri" title="@coin.Year" alt="&euro;@coin.Year" />
+                <img src="/Content/@coin.ImageUri" title="@Html.CoinCommemorativeYear(coin)" alt="@Html.CoinCommemorativeYear(coin)" />
             </a>
         </div>
     }

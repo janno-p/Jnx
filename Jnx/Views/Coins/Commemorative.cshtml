@@ -1,16 +1,17 @@
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Modules.ViewData<Jnx.Modules.CommemorativesOfYear>>
 @{
     Layout = "Coins/_Layout.cshtml";
 }
 
 <div class="page-header">
-    <h1>Mälestusmündid aastast @Model[1].Year</h1>
+    <h1>Mälestusmündid aastast @Model.ViewDetails.Year</h1>
 </div>
 
 <div class="row">
-@foreach (var coin in @Model[1].Coins) {
+@foreach (var coin in @Model.ViewDetails.Coins) {
     <div class="col-sm-3 col-xs-6">
-        <a href="/coins/@coin.Coin.Id/edit" class="thumbnail">
-            <img src="/Content/@coin.Coin.ImageUri" title="@coin.Country.Name" alt="@coin.Country.Name" />
+        <a href="/coins/@coin.Id/edit" class="thumbnail">
+            <img src="/Content/@coin.ImageUri" title="@coin.Country.Name" alt="@coin.Country.Name" />
         </a>
     </div>
 }

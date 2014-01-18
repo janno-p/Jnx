@@ -11,15 +11,15 @@
         <h2><small>Kiirvalikud</small></h2>
         <div class="row">
             <div class="col-sm-4">
-                @Html.Partial("_Countries", @Model[0].Countries)
+                @Html.Partial("_Countries", @Model.LayoutDetails.Countries)
             </div>
 
             <div class="col-sm-4">
-                @Html.Partial("_Nominals", @Model[0].NominalValues)
+                @Html.Partial("_Nominals", @Model.LayoutDetails.NominalValues)
             </div>
 
             <div class="col-sm-4">
-                @Html.Partial("_Commemoratives", @Model[0].CommemorativeYears)
+                @Html.Partial("_Commemoratives", @Model.LayoutDetails.CommemorativeYears)
             </div>
         </div>
     </div>
