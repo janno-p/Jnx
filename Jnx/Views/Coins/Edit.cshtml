@@ -12,15 +12,32 @@
     }
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div class="row">
-            <div class="col-xs-6">
-                <img data-src="holder.js/100%x180" alt="..." />
+<div class="row">
+    <div class="col-md-3 text-center">
+        <img src="/Content/@Model.ViewDetails.ImageThumbUri" class="img-thumbnail" />
+    </div>
+    <div class="col-md-9">
+        <form role="form">
+            <div class="form-group">
+                <label for="CoinCollectedBy">Annetaja:</label>
+                <input type="text" class="form-control" id="CoinCollectedBy" placeholder="Kes leidis?" value="@Model.ViewDetails.CollectedByValue" />
             </div>
-            <div class="col-xs-6">
-                Tere
+            <div class="form-group">
+                <label for="CoinCollectedAt">Kuupäev / kellaaeg:</label>
+                <div class="input-group">
+                    <input type="datetime" class="form-control" id="CoinCollectedAt" placeholder="Millal leidis?" />
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-time"></span>
+                        </button>
+                    </span>
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                <label for="CoinForTrade">Vahetamiseks:</label>
+                <input type="number" class="form-control" id="CoinForTrade" value="@Model.ViewDetails.ForTrade" />
+            </div>
+            <button type="submit" class="btn btn-default">Salvesta</button>
+        </form>
     </div>
 </div>

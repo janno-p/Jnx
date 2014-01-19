@@ -54,13 +54,22 @@ module Types =
           Type : CoinType
           Country : Country
           Image : string
+          ForTrade : int
           CollectedAt : DateTime option
           CollectedBy : string option }
         member this.ImageUri
             with get() =
                 match this.CollectedAt with
                 | Some _ -> this.Image.Insert(this.Image.Length - 4, "_collected")
-                | None -> this.Image.Insert(this.Image.Length - 4, "_thumb")
+                | None -> this.ImageThumbUri
+        member this.ImageThumbUri
+            with get() =
+                this.Image.Insert(this.Image.Length - 4, "_thumb")
+        member this.CollectedByValue
+            with get() =
+                match this.CollectedBy with
+                | Some str -> str
+                | _ -> ""
 
     type CountryStats =
         { Country : Country
@@ -101,6 +110,7 @@ module Conversions =
         { Id = reader?CoinId
           Type = coinType
           Image = reader?CoinImage
+          ForTrade = 0
           CollectedAt = reader.Optional?CoinCollectedAt
           CollectedBy = reader.Optional?CoinCollectedBy
           Country = toCountry reader }

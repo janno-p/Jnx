@@ -12,6 +12,9 @@
     <div class="col-sm-3 col-xs-6">
         <a href="/coins/@coin.Id/edit" class="thumbnail">
             <img src="/Content/@coin.ImageUri" title="@coin.Country.Name" alt="@coin.Country.Name" />
+        @if (coin.ForTrade > 0) {
+            <span class="badge pull-right">+@coin.ForTrade</span>
+        }
         </a>
     </div>
 }

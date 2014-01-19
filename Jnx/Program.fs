@@ -45,6 +45,7 @@ type Bootstrapper() =
     override this.ConfigureConventions conventions =
         base.ConfigureConventions conventions
         conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("Scripts", "Scripts", "js"))
+        conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts", "fonts", "eot", "svg", "ttf", "woff"))
 
 [<EntryPoint>]
 let main args =
