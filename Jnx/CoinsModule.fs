@@ -81,3 +81,29 @@ type CoinsModule() as this =
         | Some coin -> coin |> view "Edit"
         | _ -> notFound
     )
+
+    do this.Post.["/coins/(?<id>^\d+$)"] <- (fun args ->
+        let id = unbox<string> args?id |> int
+        match QueryCoinById id with
+        | Some coin ->
+            let coin =
+                { coin with
+                    CollectedBy = match unbox this.Request.Form?CoinCollectedBy with
+                                  | null | "" -> None
+                                  | x -> Some x
+                    CollectedAt = match unbox this.Request.Form?CoinCollectedAt with
+                                  | null | "" -> None
+                                  | x -> let mutable dt = System.DateTime.MinValue
+                                         match System.DateTime.TryParseExact(x, "dd.MM.yyyy HH:mm:ss", null, System.Globalization.DateTimeStyles.None, &dt) with
+                                         | true -> Some dt
+                                         | _ -> None
+                    ForTrade = match unbox this.Request.Form?CoinForTrade with
+                               | null | "" -> 0
+                               | x -> let mutable i = 0
+                                      match System.Int32.TryParse(x, &i) with
+                                      | true -> i
+                                      | _ -> 0 }
+            UpdateCoin coin |> ignore
+        | None -> ()
+        this.Response.AsRedirect(sprintf "/coins/%d/edit" id) :> obj
+    )

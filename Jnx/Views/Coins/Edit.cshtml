@@ -17,17 +17,17 @@
         <img src="/Content/@Model.ViewDetails.ImageThumbUri" class="img-thumbnail" />
     </div>
     <div class="col-md-9">
-        <form role="form">
+        <form role="form" action="/coins/@Model.ViewDetails.Id" method="POST">
             <div class="form-group">
                 <label for="CoinCollectedBy">Annetaja:</label>
-                <input type="text" class="form-control" id="CoinCollectedBy" placeholder="Kes leidis?" value="@Model.ViewDetails.CollectedByValue" />
+                <input type="text" class="form-control" id="CoinCollectedBy" name="CoinCollectedBy" placeholder="Kes leidis?" value="@Model.ViewDetails.CollectedByValue" />
             </div>
             <div class="form-group">
                 <label for="CoinCollectedAt">Kuupäev / kellaaeg:</label>
                 <div class="input-group">
-                    <input type="datetime" class="form-control" id="CoinCollectedAt" placeholder="Millal leidis?" />
+                    <input type="datetime" class="form-control" id="CoinCollectedAt" name="CoinCollectedAt" placeholder="PP.KK.AAAA TT:MM:SS" value="@Model.ViewDetails.CollectedAtValue" />
                     <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
+                        <button class="btn btn-default" id="set-current-date" type="button">
                             <span class="glyphicon glyphicon-time"></span>
                         </button>
                     </span>
@@ -35,9 +35,24 @@
             </div>
             <div class="form-group">
                 <label for="CoinForTrade">Vahetamiseks:</label>
-                <input type="number" class="form-control" id="CoinForTrade" value="@Model.ViewDetails.ForTrade" />
+                <input type="number" class="form-control" id="CoinForTrade" name="CoinForTrade" value="@Model.ViewDetails.ForTrade" />
             </div>
             <button type="submit" class="btn btn-default">Salvesta</button>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#set-current-date").click(function () {
+            var dt = new Date();
+            var day = dt.getDate() < 10 ? "0" + dt.getDate() : "" + dt.getDate();
+            var month = dt.getMonth() < 9 ? "0" + (1 + dt.getMonth()) : "" + (1 + dt.getMonth());
+            var year = "" + (1900 + dt.getYear());
+            var hours = dt.getHours() < 10 ? "0" + dt.getHours() : "" + dt.getHours();
+            var minutes = dt.getMinutes() < 10 ? "0" + dt.getMinutes() : "" + dt.getMinutes();
+            var seconds = dt.getSeconds() < 10 ? "0" + dt.getSeconds() : "" + dt.getSeconds();
+            $("#CoinCollectedAt").val(day + "." + month + "." + year + " " + hours + ":" + minutes + ":" + seconds);
+        });
+    });
+</script>

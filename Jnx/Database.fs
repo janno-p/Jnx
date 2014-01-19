@@ -36,7 +36,28 @@ let QueryWithConnectionString (connectionString : string) (toType : DynamicDataR
             yield reader |> toType
     }
 
+let GetDbValue value =
+    let optionType = typedefof<option<_>>
+    if value = null
+        then null
+    else
+        let valueType = value.GetType()
+        let valueProperty = valueType.GetProperty("Value")
+        if valueType.IsGenericType && valueType.GetGenericTypeDefinition() = optionType then
+            valueProperty.GetValue(value, [| |])
+        else value
+
+let ExecuteWithConnectionString (connectionString : string) (sql : string) (args : (string * obj) list) =
+    use connection = new NpgsqlConnection(connectionString)
+    use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
+    args |> Seq.iter (fun (name, value) ->
+        command.Parameters.Add(name, (GetDbValue value)) |> ignore
+    )
+    connection.Open()
+    command.ExecuteNonQuery()
+
 let Query toType = QueryWithConnectionString connectionString toType
+let Execute = ExecuteWithConnectionString connectionString
 
 module Types =
     type Country =
@@ -49,6 +70,8 @@ module Types =
         | CommonCoin of decimal
         | CommemorativeCoin of int * bool
 
+    let addFileSuffix (fileName : string) suffix = fileName.Insert(fileName.Length - 4, suffix)
+
     type Coin =
         { Id : int
           Type : CoinType
@@ -57,19 +80,16 @@ module Types =
           ForTrade : int
           CollectedAt : DateTime option
           CollectedBy : string option }
-        member this.ImageUri
-            with get() =
-                match this.CollectedAt with
-                | Some _ -> this.Image.Insert(this.Image.Length - 4, "_collected")
-                | None -> this.ImageThumbUri
-        member this.ImageThumbUri
-            with get() =
-                this.Image.Insert(this.Image.Length - 4, "_thumb")
-        member this.CollectedByValue
-            with get() =
-                match this.CollectedBy with
-                | Some str -> str
-                | _ -> ""
+        member this.ImageUri with get() = match this.CollectedAt with
+                                          | Some _ -> addFileSuffix this.Image "_collected"
+                                          | None -> this.ImageThumbUri
+        member this.ImageThumbUri with get() = addFileSuffix this.Image "_thumb"
+        member this.CollectedByValue with get() = match this.CollectedBy with
+                                                  | Some str -> str
+                                                  | _ -> ""
+        member this.CollectedAtValue with get() = match this.CollectedAt with
+                                                  | Some d -> d.ToString("dd.MM.yyyy HH:mm:ss")
+                                                  | _ -> ""
 
     type CountryStats =
         { Country : Country
@@ -231,3 +251,12 @@ module Queries =
                               where  commemorative_year is not null
                            order by  commemorative_year desc"
         Query (fun reader -> reader?commemorative_year) qry List<string * obj>.Empty
+
+    let UpdateCoin (coin : Coin) =
+        let qry = @"update  coins_coin
+                       set  collected_by = :collected_by,
+                            collected_at = :collected_at
+                     where  id = :id"
+        Execute qry [("collected_by", box coin.CollectedBy)
+                     ("collected_at", box coin.CollectedAt)
+                     ("id", box coin.Id)]
