@@ -1,5 +1,6 @@
 namespace Jnx.Modules
 
+open Jnx.Database
 open Jnx.Database.Types
 open Jnx.Database.Queries
 open Jnx.Modules.Utils

@@ -9,6 +9,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Jnx</RootNamespace>
     <AssemblyName>Jnx</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -128,9 +130,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Data.SqlProvider">
+      <HintPath>..\packages\FSharp.Data.SqlProvider\FSharp.Data.SqlProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net45\Mono.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\..\..\..\..\opt\monodevelop\lib\mono\4.0\FSharp.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net45\Npgsql.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -146,12 +159,6 @@
     </Reference>
     <Reference Include="Nancy.ViewEngines.Razor">
       <HintPath>..\packages\Nancy.Viewengines.Razor.0.21.1\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Security">
-      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net40\Mono.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\packages\Npgsql.2.0.14.3\lib\net40\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />

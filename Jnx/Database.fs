@@ -1,9 +1,51 @@
 module Jnx.Database
 
+open FSharp.Data.Sql
 open Npgsql
 open System
 open System.Configuration
 open System.Data
+
+type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx; Pooling=false;",
+                           Common.DatabaseProviderTypes.POSTGRESQL,
+                           @"E:\Work\Jnx\packages\Npgsql.2.0.14.3\lib\net40",
+                           1000,
+                           true>
+
+let db = sql.GetDataContext()
+
+let QueryNominalValues () =
+    query {
+        for coin in db.``[public].[coins_coin]`` do
+        sortByDescending coin.nominal_value
+        select coin.nominal_value
+        distinct
+    } |> Seq.toArray
+
+let QueryCommemorativeYears () =
+    query {
+        for coin in db.``[public].[coins_coin]`` do
+        where (coin.commemorative_year.IsSome)
+        sortByDescending coin.commemorative_year
+        select coin.commemorative_year.Value
+        distinct
+    } |> Seq.toArray
+
+type Country =
+        { Id : int
+          Code : string
+          Name : string
+          Genitive : string }
+
+let QueryCountries () =
+    query {
+        for country in db.``[public].[coins_country]`` do
+        sortBy country.name
+        select { Id = country.id
+                 Code = country.code
+                 Name = country.name
+                 Genitive = country.genitive }
+    } |> Seq.toArray
 
 type DynamicOptionalDataReader(reader : IDataReader) =
     member private x.Reader = reader
@@ -60,12 +102,6 @@ let Query toType = QueryWithConnectionString connectionString toType
 let Execute = ExecuteWithConnectionString connectionString
 
 module Types =
-    type Country =
-        { Id : int
-          Code : string
-          Name : string
-          Genitive : string }
-
     type CoinType =
         | CommonCoin of decimal
         | CommemorativeCoin of int * bool
@@ -136,15 +172,6 @@ module Conversions =
           Country = toCountry reader }
 
 module Queries =
-    let QueryCountries () =
-        let qry = @"select  country.id as CountryId,
-                            country.code as CountryCode,
-                            country.name as CountryName,
-                            country.genitive as CountryGenitive
-                      from  coins_country country
-                  order by  country.name asc"
-        Query Conversions.toCountry qry List<string * obj>.Empty
-
     let QueryCountryByCode code =
         let qry = @"select  country.id as CountryId,
                             country.code as CountryCode,
@@ -237,20 +264,6 @@ module Queries =
                             inner join  coins_country as country on country.id = coin.country_id
                      where  coin.id = :id"
         Query Conversions.toCoin qry [("id", id)] |> Seq.tryFind (fun _ -> true)
-
-    let QueryNominalValues () =
-        let qry = @"select distinct  nominal_value
-                               from  coins_coin
-                              where  nominal_value is not null
-                           order by  nominal_value desc"
-        Query (fun reader -> unbox<decimal> reader?nominal_value) qry List<string * obj>.Empty
-
-    let QueryCommemorativeYears () =
-        let qry = @"select distinct  commemorative_year
-                               from  coins_coin
-                              where  commemorative_year is not null
-                           order by  commemorative_year desc"
-        Query (fun reader -> reader?commemorative_year) qry List<string * obj>.Empty
 
     let UpdateCoin (coin : Coin) =
         let qry = @"update  coins_coin
