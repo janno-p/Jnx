@@ -35,6 +35,8 @@ Target "Migrate" (fun _ ->
     use connection = OpenConnection()
     if not (IsInitialized connection) then
         run "Init"
+    let result, output = executeFSI (__SOURCE_DIRECTORY__ @@ ".." @@ "Migrations") "201401271817_CreateCountries.fsx" Seq.empty<string * string>
+    output |> Seq.iter (fun x -> trace x.Message)
     trace "Yeppi!!"
 )
 

@@ -8,7 +8,7 @@ open System.Data
 
 type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx; Pooling=false;",
                            Common.DatabaseProviderTypes.POSTGRESQL,
-                           @"E:\Work\Jnx\packages\Npgsql.2.0.14.3\lib\net40",
+                           @"/opt/monodevelop/lib/mono/4.5",
                            1000,
                            true>
 
