@@ -7,9 +7,12 @@ module Migration =
         SampleValue : obj
     }
 
-    type ConstraintOptions = {
-        Name : string
-    }
+    type Name = string
+    type ColumnName = string
+
+    type Constraint =
+        | PrimaryKey of Name * ColumnName list
+        | Unique of Name * ColumnName list
 
     type DatabaseType<'T> =
         | Nullable of 'T
@@ -19,12 +22,12 @@ module Migration =
         CreateTable : bool
         TableName : string
         Columns : ColumnOptions list
-        Constraints : ConstraintOptions list
+        Constraints : Constraint list
     }
 
     let getTypeMapping (value : obj) =
         match value with
-        | :? string -> "VARCHAR2"
+        | :? string -> "TEXT"
         | :? int -> "INT"
         | :? int64 -> "LONG"
         | :? decimal -> "NUMBER"
@@ -60,6 +63,10 @@ module Migration =
                     match getDatabaseType(col.SampleValue) with
                     | Nullable typeName -> yield sprintf "%s %s" col.Name typeName
                     | NotNullable typeName -> yield sprintf "%s %s NOT NULL" col.Name typeName
+                for cons in command.Constraints do
+                    match cons with
+                    | PrimaryKey(name, columns) -> yield sprintf "CONSTRAINT %s PRIMARY KEY (%s)" name (columns |> Seq.reduce (fun acc el -> sprintf "%s,%s" acc el))
+                    | Unique(name, columns) -> yield sprintf "CONSTRAINT %s UNIQUE (%s)" name (columns |> Seq.reduce (fun acc el -> sprintf "%s,%s" acc el))
             } |> String.concat (sprintf ",%s" Environment.NewLine)
             |> builder.AppendLine
             |> ignore
@@ -84,7 +91,13 @@ module Migration =
     let initialize = (fun () -> defaultMigrationCommand)
 
     let primaryKey x name tp = (fun () ->
-        x()
+        let command = x()
+        { command with Constraints = List.append command.Constraints [ PrimaryKey(name, tp) ] }
+    )
+
+    let unique x name columns = (fun () ->
+        let command = x()
+        { command with Constraints = List.append command.Constraints [ Unique(name, columns) ] }
     )
 
     let Execute sql =
@@ -101,6 +114,8 @@ type MigrationBuilder() =
     member this.AddColumn(x, name, tp) = Migration.add_column x name tp
     [<CustomOperation("primaryKey", MaintainsVariableSpaceUsingBind = true)>]
     member this.PrimaryKey(x, name, tp) = Migration.primaryKey x name tp
+    [<CustomOperation("unique", MaintainsVariableSpaceUsingBind = true)>]
+    member this.Unique(x, name, columns) = Migration.unique x name columns
 
 let migration = new MigrationBuilder()
 
