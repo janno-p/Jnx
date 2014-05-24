@@ -98,20 +98,77 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="P:FSharp.Data.Sql.Common.ISqlProvider.SqlToEnum">
 <summary>
- Accepts sql datatype name and returns the relevant value from the DbType enum
+ Accepts SQL data type name and returns the relevant value from the DbType enum
 </summary>
 </member>
 <member name="P:FSharp.Data.Sql.Common.ISqlProvider.SqlToClr">
 <summary>
- Accepts sql datatype name and returns the CLR type
+ Accepts SQL data type name and returns the CLR type
 </summary>
 </member>
 <member name="P:FSharp.Data.Sql.Common.ISqlProvider.ClrToEnum">
 <summary>
- Accepts a full clr type name and returns the relevant value from the DbType enum
+ Accepts a full CLR type name and returns the relevant value from the DbType enum
 </summary>
+</member>
+<member name="">
+
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetTables(System.Data.IDbConnection)">
 <summary>
@@ -138,13 +195,13 @@
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetIndividualsQueryText(FSharp.Data.Sql.Schema.Table,System.Int32)">
 <summary>
- Returns the db vendor specific sql query to select the top x amount of rows from 
+ Returns the db vendor specific SQL  query to select the top x amount of rows from 
  the given table
 </summary>
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetIndividualQueryText(FSharp.Data.Sql.Schema.Table,System.String)">
 <summary>
- Returns the db vendor specific sql query to select a single row based on the table and column name specified
+ Returns the db vendor specific SQL query to select a single row based on the table and column name specified
 </summary>
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetColumns(System.Data.IDbConnection,FSharp.Data.Sql.Schema.Table)">
@@ -174,7 +231,7 @@
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommandParameter(System.String,System.Object,Microsoft.FSharp.Core.FSharpOption{System.Data.DbType})">
 <summary>
- return a new command paramter with the provided name, value and optionally type
+ return a new command parameter with the provided name, value and optionally type
 </summary>
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommand(System.Data.IDbConnection,System.String)">
@@ -260,10 +317,43 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="M:FSharp.Data.Sql.Common.SqlEntity.GetSubTable(System.String,System.String)">
 <summary>
- creates a new sql entity from alias data in this entity
+ creates a new SQL entity from alias data in this entity
 </summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -419,6 +509,27 @@
 
 </member>
 <member name="T:FSharp.Data.Sql.Common.Utilities">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.DataTable">
 
 </member>
 <member name="">
@@ -738,10 +849,271 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="M:FSharp.Data.Sql.Providers.PostgresqlProvider.FSharp-Data-Sql-Common-ISqlProvider-GetSprocs(System.Data.IDbConnection)">
 <summary>
  Have not attempted stored procs yet
 </summary>
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -897,6 +1269,9 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
 <member name="P:FSharp.Data.Sql.QueryExpression.QueryExpressionTransformer.ProjectionTransformer.ProjectionMap">
 <summary>
  holds the columns to select for each entity appearing in the projection tree, or a blank list if all columns         
@@ -923,7 +1298,7 @@
 <member name="T:FSharp.Data.Sql.QueryExpression.QueryExpressionTransformer.ProjectionTransformer">
 <summary>
  Visitor has two uses - 1. extracting the columns the select statement
- 2. transform the projection epxression into something that will work with the SqlEntity runtime object eg it replaces chunks of the 
+ 2. transform the projection expression into something that will work with the SqlEntity runtime object e.g. it replaces chunks of the 
 </summary>
 </member>
 <member name="">
@@ -1103,7 +1478,58 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="T:FSharp.Data.Sql.Runtime.QueryImplementation">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
 
 </member>
 <member name="">

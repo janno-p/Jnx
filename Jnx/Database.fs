@@ -6,9 +6,9 @@ open System
 open System.Configuration
 open System.Data
 
-type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx; Pooling=false;",
+type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx;",
                            Common.DatabaseProviderTypes.POSTGRESQL,
-                           @"/opt/monodevelop/lib/mono/4.5",
+                           @"/opt/mono-3.4.0/lib/mono/4.5",
                            1000,
                            true>
 
