@@ -12,7 +12,9 @@ open System.Collections.Generic
 open System.ComponentModel.DataAnnotations
 
 type CountryForm =
-    { [<Required(ErrorMessage = "Kood on kohustuslik.")>]
+    { Id : string
+
+      [<Required(ErrorMessage = "Kood on kohustuslik.")>]
       [<StringLength(2, MinimumLength = 2, ErrorMessage = "Kood peab olema kahetäheline.")>]
       Code : string
 
@@ -25,10 +27,20 @@ type CountryForm =
       Errors : IDictionary<string, IList<ModelValidationError>> }
 
     static member Empty =
-        { Code = ""; Name = ""; Genitive = ""; Errors = new Dictionary<string, IList<ModelValidationError>>() }
+        { Id = ""; Code = ""; Name = ""; Genitive = ""; Errors = new Dictionary<string, IList<ModelValidationError>>() }
 
-    member this.ToModel () =
-        { Id = 0; Code = this.Code; Name = this.Name; Genitive = this.Genitive }
+    static member FromModel (country : Country) =
+        { CountryForm.Empty with Id = country.Id.ToString(); Code = country.Code; Name = country.Name; Genitive = country.Genitive }
+
+    member this.ToModel () : Country =
+        let mutable id = 0
+        System.Int32.TryParse(this.Id, &id) |> ignore
+        { Id = id; Code = this.Code; Name = this.Name; Genitive = this.Genitive }
+
+    member this.ToData () =
+        [ ("name", this.Name)
+          ("code", this.Code)
+          ("genitive", this.Genitive) ]
 
 type CountryFormBinder () =
     interface IBinder with
@@ -45,7 +57,7 @@ type CountriesModule() as this =
 
     do fancy this {
         get "/countries" (fun () -> fancyAsync {
-            let countries = Countries.GetAll()
+            let countries = Countries.GetAll (Range (0, 10))
             return this.View.["Index", countries]
         })
 
@@ -60,7 +72,9 @@ type CountriesModule() as this =
         })
 
         get "/countries/(?<code>^[a-z]{2}$)/edit" (fun code -> fancyAsync {
-            return 404 :> obj
+            return match Countries.GetByCode code with
+                   | None -> 404 :> obj
+                   | Some country -> this.View.["Edit", CountryForm.FromModel country] :> obj
         })
 
         post "/countries" (fun () -> fancyAsync {
@@ -71,8 +85,12 @@ type CountriesModule() as this =
                    | _ -> this.View.["New", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
         })
 
-        put "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
-            return 404 :> obj
+        put "/countries/(?<id>^\d+$)" (fun id -> fancyAsync {
+            let countryForm = this.BindAndValidate<CountryForm>()
+            return match this.ModelValidationResult.IsValid with
+                   | true -> countryForm.ToData() |> Countries.Update id |> ignore
+                             this.Response.AsRedirect("/countries") :> obj
+                   | _ -> this.View.["Edit", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
         })
 
         delete "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {

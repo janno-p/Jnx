@@ -140,6 +140,9 @@
     </None>
     <None Include="fonts\fontawesome-webfont.woff" />
     <None Include="fonts\FontAwesome.otf" />
+    <None Include="Views\Countries\Edit.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Data.SqlProvider">

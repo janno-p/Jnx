@@ -31,7 +31,7 @@ type CoinsModule() as this =
 
     let loadLayoutDetails () =
         { CommemorativeYears = QueryCommemorativeYears() |> Seq.map (fun x -> x.ToString()) |> Seq.toArray
-          Countries = Countries.GetAll()
+          Countries = Countries.GetAll All
           NominalValues = QueryNominalValues() |> Seq.toArray }
 
     let view viewName (viewData : 'T) =
