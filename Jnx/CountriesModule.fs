@@ -37,11 +37,6 @@ type CountryForm =
         System.Int32.TryParse(this.Id, &id) |> ignore
         { Id = id; Code = this.Code; Name = this.Name; Genitive = this.Genitive }
 
-    member this.ToData () =
-        [ ("name", this.Name)
-          ("code", this.Code)
-          ("genitive", this.Genitive) ]
-
 type CountryFormBinder () =
     interface IBinder with
         member this.Bind(context, modelType, instance, configuration, blackList) =
@@ -85,15 +80,16 @@ type CountriesModule() as this =
                    | _ -> this.View.["New", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
         })
 
-        put "/countries/(?<id>^\d+$)" (fun id -> fancyAsync {
+        put "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
             let countryForm = this.BindAndValidate<CountryForm>()
             return match this.ModelValidationResult.IsValid with
-                   | true -> countryForm.ToData() |> Countries.Update id |> ignore
+                   | true -> [ ("name", countryForm.Name); ("genitive", countryForm.Genitive) ] |> Countries.Update code |> ignore
                              this.Response.AsRedirect("/countries") :> obj
-                   | _ -> this.View.["Edit", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
+                   | _ -> this.View.["Edit", { countryForm with Id = id.ToString(); Errors = this.ModelValidationResult.Errors }] :> obj
         })
 
         delete "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
-            return 404 :> obj
+            Countries.Delete code
+            return 200 :> obj
         })
     }

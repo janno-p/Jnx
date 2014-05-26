@@ -52,21 +52,16 @@ module Countries =
                          Name = country.name
                          Genitive = country.genitive } } |> Seq.toArray
 
-    //let ToModelOption (country : sql.dataContext.``[public].[coins_country]Entity``) =
-    //    match box country with
-    //    | null -> None
-    //    | _ -> Some (ToModel country)
-
     let Save (country : Country) =
         db.ClearUpdates() |> ignore
         let dbCountry = db.``[public].[coins_country]``.Create(country.Code, country.Genitive, country.Name)
         db.SubmitUpdates()
         { country with Id = dbCountry.id }
 
-    let Update id columns =
+    let Update code columns =
         db.ClearUpdates() |> ignore
-        let dbCountry = query { for country in db.``[public].[coins_country]`` do where (country.id = id) } |> Seq.head
-        dbCountry.SetData(columns)
+        let dbCountry = query { for country in db.``[public].[coins_country]`` do where (country.code = code) } |> Seq.head
+        columns |> Seq.iter (fun (k, v) -> dbCountry.SetColumn(k, v))
         db.SubmitUpdates()
         dbCountry |> ToModel
 
@@ -74,3 +69,9 @@ module Countries =
         query { for country in db.``[public].[coins_country]`` do where (country.code = code) }
         |> Seq.map ToModel
         |> Seq.tryFind (fun _ -> true)
+
+    let Delete code =
+        db.ClearUpdates() |> ignore
+        let dbCountry = query { for country in db.``[public].[coins_country]`` do where (country.code = code) } |> Seq.head
+        dbCountry.Delete()
+        db.SubmitUpdates()

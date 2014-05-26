@@ -112,7 +112,9 @@
     <None Include="fonts\glyphicons-halflings-regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fonts\glyphicons-halflings-regular.woff" />
+    <None Include="fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Scripts\bootstrap.js" />
     <None Include="Scripts\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -138,16 +140,18 @@
     <None Include="fonts\fontawesome-webfont.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="fonts\fontawesome-webfont.woff" />
+    <None Include="fonts\fontawesome-webfont.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="fonts\FontAwesome.otf" />
     <None Include="Views\Countries\Edit.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Scripts\site.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="FSharp.Data.SqlProvider">
-      <HintPath>..\packages\FSharp.Data.SqlProvider\FSharp.Data.SqlProvider.dll</HintPath>
-    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -182,5 +186,8 @@
       <HintPath>..\packages\Nancy.Validation.DataAnnotations.0.22.2\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="FSharp.Data.SqlProvider">
+      <HintPath>..\packages\FSharp.Data.SqlProvider\FSharp.Data.SqlProvider.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
