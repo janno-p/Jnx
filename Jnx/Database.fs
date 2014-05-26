@@ -70,7 +70,7 @@ let QueryWithConnectionString (connectionString : string) (toType : DynamicDataR
         use connection = new NpgsqlConnection(connectionString)
         use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
         args |> Seq.iter (fun (name, value) ->
-            command.Parameters.Add(name, value) |> ignore
+            command.Parameters.AddWithValue(name, value) |> ignore
         )
         connection.Open()
         use reader = new DynamicDataReader(command.ExecuteReader())
@@ -93,7 +93,7 @@ let ExecuteWithConnectionString (connectionString : string) (sql : string) (args
     use connection = new NpgsqlConnection(connectionString)
     use command = new NpgsqlCommand(sql, connection, CommandType = CommandType.Text)
     args |> Seq.iter (fun (name, value) ->
-        command.Parameters.Add(name, (GetDbValue value)) |> ignore
+        command.Parameters.AddWithValue(name, (GetDbValue value)) |> ignore
     )
     connection.Open()
     command.ExecuteNonQuery()
