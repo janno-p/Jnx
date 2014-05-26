@@ -1,6 +1,7 @@
 module Jnx.Database
 
 open FSharp.Data.Sql
+open Jnx.Repositories
 open Npgsql
 open System
 open System.Configuration
@@ -29,22 +30,6 @@ let QueryCommemorativeYears () =
         sortByDescending coin.commemorative_year
         select coin.commemorative_year.Value
         distinct
-    } |> Seq.toArray
-
-type Country =
-        { Id : int
-          Code : string
-          Name : string
-          Genitive : string }
-
-let QueryCountries () =
-    query {
-        for country in db.``[public].[coins_country]`` do
-        sortBy country.name
-        select { Id = country.id
-                 Code = country.code
-                 Name = country.name
-                 Genitive = country.genitive }
     } |> Seq.toArray
 
 type DynamicOptionalDataReader(reader : IDataReader) =

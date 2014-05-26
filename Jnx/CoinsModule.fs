@@ -4,6 +4,7 @@ open Jnx.Database
 open Jnx.Database.Types
 open Jnx.Database.Queries
 open Jnx.Modules.Utils
+open Jnx.Repositories
 open Nancy
 
 type LayoutDetails =
@@ -30,7 +31,7 @@ type CoinsModule() as this =
 
     let loadLayoutDetails () =
         { CommemorativeYears = QueryCommemorativeYears() |> Seq.map (fun x -> x.ToString()) |> Seq.toArray
-          Countries = QueryCountries() |> Seq.toArray
+          Countries = Countries.GetAll()
           NominalValues = QueryNominalValues() |> Seq.toArray }
 
     let view viewName (viewData : 'T) =

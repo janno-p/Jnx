@@ -1,0 +1,66 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Modules.CountryForm>
+@{
+    Layout = "Shared/_Layout.cshtml";
+    string codeError = Model.Errors.ContainsKey("Code") ? "has-error" : null;
+    string nameError = Model.Errors.ContainsKey("Name") ? "has-error" : null;
+    string genitiveError = Model.Errors.ContainsKey("Genitive") ? "has-error" : null;
+}
+
+<div class="page-header">
+    <h1>Uue euroala riigi lisamine</h1>
+</div>
+
+@if (Model.Errors.Count > 0) {
+<div class="alert alert-danger">
+    <p><strong>Uue euroala riigi lisamine ebaõnnestus!</strong> Palun paranda allpool välja toodud vead.</p>
+</div>
+}
+
+<div>
+    <form class="form-horizontal" role="form" action="/countries" method="post">
+        <div class="form-group @nameError">
+            <label for="Name" class="col-sm-2 control-label">Nimi:</label>
+            <div class="col-sm-5">
+                <input class="form-control" id="Name" name="Name" placeholder="Euroala riigi nimi" value="@Model.Name" />
+            </div>
+            @if (Model.Errors.ContainsKey("Name")) {
+            <div class="col-sm-5">
+                @foreach (var error in Model.Errors["Name"]) {
+                <p class="help-block">@error.ErrorMessage</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="form-group @codeError">
+            <label for="Code" class="col-sm-2 control-label">Kood:</label>
+            <div class="col-sm-5">
+                <input class="form-control" id="Code" name="Code" placeholder="Euroala riigi kahetäheline kood" value="@Model.Code" />
+            </div>
+            @if (Model.Errors.ContainsKey("Code")) {
+            <div class="col-sm-5">
+                @foreach (var error in Model.Errors["Code"]) {
+                <p class="help-block">@error.ErrorMessage</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="form-group @genitiveError">
+            <label for="Genitive" class="col-sm-2 control-label">Omastav:</label>
+            <div class="col-sm-5">
+                <input class="form-control" id="Genitive" name="Genitive" placeholder="Euroala riigi nimi omastavas käändes" value="@Model.Genitive" />
+            </div>
+            @if (Model.Errors.ContainsKey("Genitive")) {
+            <div class="col-sm-5">
+                @foreach (var error in Model.Errors["Genitive"]) {
+                <p class="help-block">@error.ErrorMessage</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-5">
+                <button type="submit" class="btn btn-default">Lisa</button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,5 +1,28 @@
+@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Repositories.Country[]>
 @{
     Layout = "Shared/_Layout.cshtml";
 }
 
-<h2>Countries</h2>
+<div class="page-header">
+    <a class="btn btn-success btn-lg pull-right" href="/countries/new">
+        <span class="fa fa-edit fa-lg"></span> Lisa uus
+    </a>
+    <h1>Euroala riigid</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Riik</th>
+            <th>Tavamündid</th>
+            <th>Mälestusmündid</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in @Model) {
+        <tr>
+            <td><a href="/countries/@country.Code">@country.Name</a></td>
+        </tr>
+        }
+    </tbody>
+</table>
