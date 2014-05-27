@@ -3,8 +3,11 @@
 open Fake
 open MigrationBase
 open Npgsql
+open System
+open System.Diagnostics
 open System.IO
 open System.Text.RegularExpressions
+open System.Threading
 
 let IsInitialized (connection : NpgsqlConnection) =
     use command = connection.CreateCommand()
@@ -23,17 +26,32 @@ let SetLastMigration (connection : NpgsqlConnection) (migrationName : string) =
     command.Parameters.Add("name", migrationName) |> ignore
     command.ExecuteNonQuery() |> ignore
 
-Target "Init" (fun _ ->
-    use connection = OpenConnection()
-    if IsInitialized connection then
-        failwith "Schema is already initialized."
-    trace "Yeppi!!"
-)
+let private FakeStartInfo script workingDirectory target =
+    (fun (info: ProcessStartInfo) ->
+        info.FileName <- (__SOURCE_DIRECTORY__ @@ ".." @@ "packages" @@ "FAKE.2.4.8.0" @@ "tools" @@ "FAKE.exe")
+        info.Arguments <- String.concat " " [script; target ]
+        info.WorkingDirectory <- workingDirectory)
+
+let private ExecuteFake workingDirectory script target =
+    let (result, messages) =
+        ExecProcessRedirected
+            (FakeStartInfo script workingDirectory target)
+            TimeSpan.MaxValue
+    Thread.Sleep 1000
+    (result, messages)
+
+let private Init (connection : NpgsqlConnection) =
+    if not (IsInitialized connection) then
+        use command = connection.CreateCommand()
+        command.CommandText <- @"CREATE TABLE ""migrations"" (
+                                    ""migration"" VARCHAR(12) NOT NULL,
+                                    CONSTRAINT ""pk_migrations"" PRIMARY KEY (""migration"")
+                                 )"
+        command.ExecuteNonQuery() |> ignore
 
 Target "Migrate" (fun _ ->
     use connection = OpenConnection()
-    if not (IsInitialized connection) then
-        run "Init"
+    Init connection
     let migrationDir = DirectoryInfo (__SOURCE_DIRECTORY__ @@ ".." @@ "Migrations")
     let files = migrationDir.GetFiles("????????????_*.fsx")
                 |> Array.filter (fun fi -> Regex.IsMatch(fi.Name, @"^\d{12}_\w+\.fsx$"))
@@ -49,7 +67,7 @@ Target "Migrate" (fun _ ->
                        | false -> files
     let appliedFiles = pendingFiles
                        |> Seq.takeWhile (fun (_, file) ->
-                            let success, output = executeFSI migrationDir.FullName file Seq.empty<string * string>
+                            let success, output = ExecuteFake migrationDir.FullName file "Upgrade"
                             output |> Seq.iter (fun x -> match x.IsError with | true -> traceError x.Message | _ -> trace x.Message)
                             success )
                        |> Seq.toArray
