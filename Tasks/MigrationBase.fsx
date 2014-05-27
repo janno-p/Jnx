@@ -2,10 +2,10 @@
 #I "../packages/FAKE.2.4.8.0/tools"
 #I "../packages/Npgsql.2.1.3/lib/net45"
 
-#r "FakeLib.dll"
+#r "FakeLib"
 #r "Jnx.Tasks"
-#r "Npgsql.dll"
-#r "System.Data.dll"
+#r "Npgsql"
+#r "System.Data"
 
 open Fake
 open Npgsql

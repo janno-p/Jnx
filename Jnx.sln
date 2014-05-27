@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{B03017E5
 	ProjectSection(SolutionItems) = preProject
 		Tasks\Deploy.fsx = Tasks\Deploy.fsx
 		Tasks\Migrations.fsx = Tasks\Migrations.fsx
+		Tasks\MigrationBase.fsx = Tasks\MigrationBase.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D1BC124E-E1C0-4005-AC92-57382A6D0547}"
@@ -23,8 +24,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{6ECF293F-432F-4AAE-9316-AF8D7EC91682}"
 	ProjectSection(SolutionItems) = preProject
 		Migrations\201401271817_CreateCountries.fsx = Migrations\201401271817_CreateCountries.fsx
-		Migrations\MigrationExpressions.fsx = Migrations\MigrationExpressions.fsx
-		Migrations\201405261710_CreateCountries.sql = Migrations\201405261710_CreateCountries.sql
 	EndProjectSection
 EndProject
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx.Tasks", "Jnx.Tasks\Jnx.Tasks.fsproj", "{301FF209-5A0A-4F20-84DA-5DB7480208C3}"

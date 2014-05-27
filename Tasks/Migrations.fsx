@@ -1,28 +1,27 @@
-#I "../packages/FAKE.2.4.8.0/tools"
-#I "../packages/Npgsql.2.0.14.3/lib/net40"
-
-#r "FakeLib.dll"
-#r "Npgsql.dll"
-#r "System.Data.dll"
+#load "MigrationBase.fsx"
 
 open Fake
+open MigrationBase
 open Npgsql
-
-let OpenConnection () =
-    let connectionStringName = "Jnx"
-    let x = readConfig(__SOURCE_DIRECTORY__ @@ "../Jnx/ConnectionStrings.config")
-    match x.SelectSingleNode(sprintf "//connectionStrings/add[@name='%s']/@connectionString" connectionStringName) with
-    | null -> failwith (sprintf @"ConnectionString named ""%s"" was not found in configuration settings." connectionStringName)
-    | node ->
-        let connection = new NpgsqlConnection(node.Value)
-        connection.Open()
-        connection
+open System.IO
+open System.Text.RegularExpressions
 
 let IsInitialized (connection : NpgsqlConnection) =
     use command = connection.CreateCommand()
     command.CommandText <- @"SELECT COUNT(*) FROM information_schema.tables WHERE table_catalog=:schemaname AND table_name='migrations'"
     command.Parameters.Add("schemaname", connection.Database) |> ignore
     unbox<int64> (command.ExecuteScalar()) > 0L
+
+let GetLastMigration (connection : NpgsqlConnection) =
+    use command = connection.CreateCommand()
+    command.CommandText <- @"SELECT MAX(m.migration) FROM (SELECT migration FROM migrations UNION ALL SELECT '0' AS migration) m"
+    unbox<string> (command.ExecuteScalar())
+
+let SetLastMigration (connection : NpgsqlConnection) (migrationName : string) =
+    use command = connection.CreateCommand()
+    command.CommandText <- @"INSERT INTO migrations (migration) VALUES (:name)"
+    command.Parameters.Add("name", migrationName) |> ignore
+    command.ExecuteNonQuery() |> ignore
 
 Target "Init" (fun _ ->
     use connection = OpenConnection()
@@ -35,9 +34,27 @@ Target "Migrate" (fun _ ->
     use connection = OpenConnection()
     if not (IsInitialized connection) then
         run "Init"
-    let result, output = executeFSI (__SOURCE_DIRECTORY__ @@ ".." @@ "Migrations") "201401271817_CreateCountries.fsx" Seq.empty<string * string>
-    output |> Seq.iter (fun x -> trace x.Message)
-    trace "Yeppi!!"
+    let migrationDir = DirectoryInfo (__SOURCE_DIRECTORY__ @@ ".." @@ "Migrations")
+    let files = migrationDir.GetFiles("????????????_*.fsx")
+                |> Array.filter (fun fi -> Regex.IsMatch(fi.Name, @"^\d{12}_\w+\.fsx$"))
+                |> Array.map (fun fi -> (fi.Name.Substring(0, 12), fi.Name))
+                |> Array.sortBy (fun (id, _) -> id)
+    if (files |> Array.length) <> (files |> Seq.distinct |> Seq.length) then
+        failwith "Duplication migration files detected."
+    let lastMigration = GetLastMigration connection
+    let pendingFiles = match files |> Array.exists (fun (id, _) -> id = lastMigration) with
+                       | true -> files |> Seq.skipWhile (fun (id, _) -> id <> lastMigration)
+                                       |> Seq.skip 1
+                                       |> Seq.toArray
+                       | false -> files
+    let appliedFiles = pendingFiles
+                       |> Seq.takeWhile (fun (_, file) ->
+                            let success, output = executeFSI migrationDir.FullName file Seq.empty<string * string>
+                            output |> Seq.iter (fun x -> match x.IsError with | true -> traceError x.Message | _ -> trace x.Message)
+                            success )
+                       |> Seq.toArray
+    if not (appliedFiles |> Array.isEmpty) then
+        SetLastMigration connection (fst (appliedFiles |> Seq.last))
 )
 
 RunTargetOrDefault "Migrate"

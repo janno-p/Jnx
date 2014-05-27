@@ -1,4 +1,4 @@
-#load "MigrationBase.fsx"
+#load "../Tasks/MigrationBase.fsx"
 
 open Fake
 open Jnx.Tasks.Migrations
