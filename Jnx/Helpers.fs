@@ -1,6 +1,6 @@
 namespace Jnx.Helpers
 
-open Jnx.Database.Types
+open Jnx.Repositories
 open Nancy.ViewEngines.Razor
 open System
 open System.Text
@@ -37,16 +37,22 @@ module HtmlHelperExtensions =
         | _ -> "success"
 
     [<Extension>]
+    let PercentRatio (this : HtmlHelpers<'T>) current total =
+        match total with
+        | 0 -> 100
+        | _ -> current * 100 / total
+
+    [<Extension>]
     let CoinNominalValue (this : HtmlHelpers<'T>) (coin : Coin) =
         match coin.Type with
-        | CommonCoin nominalValue -> nominalValue
+        | CommonCoin (_, nominalValue) -> nominalValue
         | _ -> 2M
         |> sprintf "&euro;%.2f"
 
     [<Extension>]
     let CoinCommemorativeYear (this : HtmlHelpers<'T>) (coin : Coin) =
         match coin.Type with
-        | CommemorativeCoin (year, _) -> year.ToString()
+        | CommemorativeCoin (_, year, _) -> year.ToString()
         | _ -> ""
 
     [<Extension>]

@@ -1,8 +1,6 @@
 namespace Jnx.Modules
 
 open Fancy
-open Jnx.Database
-open Jnx.Database.Conversions
 open Jnx.Modules.Utils
 open Jnx.Repositories
 open Nancy
@@ -12,9 +10,7 @@ open System.Collections.Generic
 open System.ComponentModel.DataAnnotations
 
 type CountryForm =
-    { Id : string
-
-      [<Required(ErrorMessage = "Kood on kohustuslik.")>]
+    { [<Required(ErrorMessage = "Kood on kohustuslik.")>]
       [<StringLength(2, MinimumLength = 2, ErrorMessage = "Kood peab olema kahetäheline.")>]
       Code : string
 
@@ -27,15 +23,13 @@ type CountryForm =
       Errors : IDictionary<string, IList<ModelValidationError>> }
 
     static member Empty =
-        { Id = ""; Code = ""; Name = ""; Genitive = ""; Errors = new Dictionary<string, IList<ModelValidationError>>() }
+        { Code = ""; Name = ""; Genitive = ""; Errors = new Dictionary<string, IList<ModelValidationError>>() }
 
     static member FromModel (country : Country) =
-        { CountryForm.Empty with Id = country.Id.ToString(); Code = country.Code; Name = country.Name; Genitive = country.Genitive }
+        { CountryForm.Empty with Code = country.Code; Name = country.Name; Genitive = country.Genitive }
 
     member this.ToModel () : Country =
-        let mutable id = 0
-        System.Int32.TryParse(this.Id, &id) |> ignore
-        { Id = id; Code = this.Code; Name = this.Name; Genitive = this.Genitive }
+        { Code = this.Code; Name = this.Name; Genitive = this.Genitive }
 
 type CountryFormBinder () =
     interface IBinder with
@@ -85,7 +79,7 @@ type CountriesModule() as this =
             return match this.ModelValidationResult.IsValid with
                    | true -> [ ("name", countryForm.Name); ("genitive", countryForm.Genitive) ] |> Countries.Update code |> ignore
                              this.Response.AsRedirect("/countries") :> obj
-                   | _ -> this.View.["Edit", { countryForm with Id = id.ToString(); Errors = this.ModelValidationResult.Errors }] :> obj
+                   | _ -> this.View.["Edit", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
         })
 
         delete "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {

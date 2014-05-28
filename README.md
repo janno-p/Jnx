@@ -15,6 +15,6 @@ Home site (F# version)
 ## TODO ##
 
 - [ ] Complate coins module
-- [ ] Database migrations with FAKE.
+- [x] Database migrations with FAKE.
 - [x] Very basic type provider for Npgsql. Using existing [SQLProvider](http://github.com/fsprojects/SQLProvider)
 - [x] Very basic LINQ provider for Npgsql. Using existing [SQLProvider](http://github.com/fsprojects/SQLProvider)

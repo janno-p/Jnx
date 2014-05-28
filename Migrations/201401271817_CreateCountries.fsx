@@ -14,9 +14,9 @@ Target "Upgrade" (fun _ ->
 
     Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_country>) ->
         m.CreateTable (fun t ->
-            t.AddColumn <@ fun x -> x.code @> (String 2) NotNull
-            t.AddColumn <@ fun x -> x.name @> (String 50) NotNull
-            t.AddColumn <@ fun x -> x.genitive @> (String 50) NotNull
+            t.AddColumn <@ fun x -> x.code @> (String 2)
+            t.AddColumn <@ fun x -> x.name @> (String 50)
+            t.AddColumn <@ fun x -> x.genitive @> (String 50)
             t.PrimaryKey <@ fun x -> x.code @>
             t.Unique <@ fun x -> x.code @>
             t.Unique <@ fun x -> x.name @>
@@ -47,9 +47,7 @@ Target "Upgrade" (fun _ ->
 )
 
 Target "Downgrade" (fun _ ->
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_country>) ->
-        m.DropTable ()
-    )
+    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_country>) -> m.DropTable ())
 )
 
 RunTargetOrDefault "Upgrade"

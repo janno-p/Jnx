@@ -10,16 +10,18 @@ open Microsoft.FSharp.Quotations.Patterns
 open Microsoft.FSharp.Linq.RuntimeHelpers
 
 type ColumnType =
+    | Boolean
+    | Decimal of int * int
+    | Integer
     | Serial
+    | SmallInt
     | String of int
     | Text
-
-type Nullable =
-    | Null
-    | NotNull
+    | Timestamp
 
 type ITableBuilder<'T> =
-    abstract member AddColumn : Expr<'T -> 'a> -> ColumnType -> Nullable -> unit
+    abstract member AddColumn : Expr<'T -> 'a> -> ColumnType -> unit
+    abstract member ForeignKey : Expr<'T -> 'F -> 'a> -> unit
     abstract member PrimaryKey : Expr<'T -> 'a> -> unit
     abstract member Unique : Expr<'T -> 'a> -> unit
 
@@ -30,24 +32,34 @@ type IMigrationBuilder<'T> =
 
 type TableMeta<'T> () =
     let tableName = typeof<'T>.Name
-    let columns = new Dictionary<string, (ColumnType * Nullable)>()
+    let columns = new Dictionary<string, (ColumnType * Type)>()
     let uniqueKeys = new List<string list>()
+    let foreignKeys = new List<(string * string list * string list)>()
     let mutable primaryKeys = [ "id" ]
-    let GetColumnSpec (columnType, nullable) =
+
+    let IsOption (tp : Type) = tp.IsGenericType && tp.GetGenericTypeDefinition() = typedefof<Option<_>>
+
+    let GetColumnSpec (columnType, runtimeType) =
         let typeInfo = match columnType with
+                       | Boolean -> "BOOLEAN"
+                       | Decimal (precision, scale) -> sprintf "DECIMAL(%d,%d)" precision scale
+                       | Integer -> "INTEGER"
                        | Serial -> "SERIAL"
+                       | SmallInt -> "SMALLINT"
                        | String length -> sprintf "VARCHAR(%d)" length
                        | Text -> "TEXT"
-        let nullableInfo = match nullable with
-                           | Null -> "NULL"
-                           | NotNull -> "NOT NULL"
-        sprintf "%s %s" typeInfo nullableInfo
+                       | Timestamp -> "TIMESTAMP"
+        let nullable = match IsOption runtimeType with
+                       | true -> "NULL"
+                       | _ -> "NOT NULL"
+        sprintf "%s %s" typeInfo nullable
+
     override this.ToString () =
         let separator = "," + Environment.NewLine
         let sql = new StringBuilder()
         sql.AppendLine (sprintf @"CREATE TABLE ""%s"" (" tableName) |> ignore
         if primaryKeys.Length = 1 && primaryKeys.[0] = "id" && not (columns.ContainsKey "id") then
-            columns.Add("id", (Serial, NotNull))
+            columns.Add("id", (Serial, typeof<int>))
         let fullColumns = columns |> Seq.map (fun k -> sprintf @"""%s"" %s" k.Key (GetColumnSpec k.Value)) |> Seq.toArray
         let fieldPart = Some (String.Join(separator, fullColumns))
         let primaryKeyPart = match primaryKeys with
@@ -59,17 +71,42 @@ type TableMeta<'T> () =
         let uniquePart = match uniqueKeyStrings with
                          | [] -> None
                          | _ -> Some (String.Join(separator, uniqueKeyStrings))
-        sql.AppendLine (String.Join(separator, [ fieldPart; primaryKeyPart; uniquePart ] |> List.choose (fun x -> x) |> List.toArray)) |> ignore
+
+        let fkPart = match foreignKeys.Count with
+                     | 0 -> None
+                     | _ -> Some (String.Join(separator, (foreignKeys |> Seq.map (fun (n, x, y) -> sprintf @"CONSTRAINT ""fk_%s_%s"" FOREIGN KEY (%s) REFERENCES ""%s"" (%s)" tableName n (String.Join(", ", (x |> List.map (fun x1 -> sprintf @"""%s""" x1)))) n (String.Join(", ", (y |> List.map (fun x1 -> sprintf @"""%s""" x1))))))))
+        sql.AppendLine (String.Join(separator, [ fieldPart; primaryKeyPart; uniquePart; fkPart ] |> List.choose (fun x -> x) |> List.toArray)) |> ignore
         sql.Append (")") |> ignore
         sql.ToString()
     interface ITableBuilder<'T> with
-        member this.AddColumn expr columnType nullable =
+        member this.AddColumn expr columnType =
             match expr with
             | Lambda(param, body) ->
                 match body with
-                | PropertyGet(_, pi, _) -> columns.Add(pi.Name, (columnType, nullable))
+                | PropertyGet(_, pi, _) -> columns.Add(pi.Name, (columnType, pi.PropertyType))
                 | _ -> failwith "Unsupported expression!"
             | _ -> failwith "Unsupported expression!"
+        member this.ForeignKey (expr : Expr<'T -> 'F -> 'a>) =
+            match expr with
+            | Lambda(param, body) ->
+                match body with
+                | Lambda(param, body) ->
+                    match body with
+                    | NewTuple(exprlist) ->
+                        match exprlist with
+                        | [t; fk] ->
+                            match (t, fk) with
+                            | (PropertyGet(_, tpi, _), PropertyGet(_, fkpi, _)) ->
+                                foreignKeys.Add((typeof<'F>.Name, [tpi.Name], [fkpi.Name]))
+                            | (NewTuple(tl), NewTuple(fkl)) ->
+                                foreignKeys.Add((typeof<'F>.Name,
+                                                 tl |> List.choose (fun e -> match e with | PropertyGet(_, pi, _) -> Some (pi.Name) | _ -> None),
+                                                 fkl |> List.choose (fun e -> match e with | PropertyGet(_, pi, _) -> Some (pi.Name) | _ -> None)))
+                            | _ -> failwith (sprintf "Unsupported expression: (%O, %O) !" t fk)
+                        | _ -> failwith (sprintf "Unsupported expression: %O!" exprlist)
+                    | _ -> failwith (sprintf "Unsupported expression: %O!" body)
+                | _ -> failwith (sprintf "Unsupported expression: %O!" body)
+            | _ -> failwith (sprintf "Unsupported expression: %O!" expr)
         member this.PrimaryKey expr =
             match expr with
             | Lambda(param, body) ->
