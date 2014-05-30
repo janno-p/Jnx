@@ -25,11 +25,13 @@
 }
             <td><a href="/coins/@stats.Country.Code">@stats.Country.Name</a></td>
             <td>
+                @if (@stats.TotalCommon > 0) {
                 <div class="progress" title="@stats.CollectedCommon/@stats.TotalCommon">
                     <div class="progress-bar progress-bar-@Html.ProgressType(commonRatio)" role="progressbar" aria-valuenow="@stats.CollectedCommon" aria-valuemin="0" aria-valuemax="@stats.TotalCommon" style="width: @commonRatio%">
                         <span class="sr-only">@commonRatio% Complete (success)</span>
                     </div>
                 </div>
+                }
             </td>
             <td>
                 @if (@stats.TotalCommemorative > 0) {

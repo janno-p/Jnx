@@ -1,5 +1,6 @@
 namespace Jnx.Modules
 
+open Fancy
 open Jnx.Modules.Utils
 open Jnx.Repositories
 open Nancy
@@ -36,25 +37,28 @@ type CoinsModule() as this =
                       ViewDetails = viewData }
         this.View.[viewName, model] :> obj
 
+    do fancy this {
+        get "/coins" (fun () -> fancyAsync {
+            this.ViewBag ? Title <- "Mündikogu"
+            return Coins.GetCountryStatistics() |> view "Index"
+        })
+
+        get "/coins/(?<countryCode>^[a-z]{2}$)" (fun countryCode -> fancyAsync {
+            return match Countries.GetByCode countryCode with
+                   | Some country ->
+                        let commonCoins, commemorativeCoins = Coins.OfCountry country
+                        this.ViewBag ? Title <- sprintf "%s mündid" country.Genitive
+                        { Country = country; CommonCoins = commonCoins; CommemorativeCoins = commemorativeCoins }
+                            |> view "Country"
+                   | _ -> 404 :> obj
+        })
+    }
+
+
+
+
+
     let notFound = 404 :> obj
-
-    do this.Get.["/coins"] <- (fun _ ->
-        this.ViewBag?Title <- "Mündikogu"
-        Coins.GetCountryStatistics() |> view "Index"
-    )
-
-    do this.Get.["/coins/(?<countryCode>^[a-z]{2}$)"] <- (fun args ->
-        let countryCode = unbox<string> args?countryCode
-        match Countries.GetByCode countryCode with
-        | Some country ->
-            let commonCoins, commemorativeCoins = Coins.OfCountry country
-            this.ViewBag?Title <- sprintf "%s mündid" country.Genitive
-            { Country = country
-              CommonCoins = commonCoins
-              CommemorativeCoins = commemorativeCoins }
-            |> view "Country"
-        | _ -> notFound
-    )
 
     do this.Get.["/coins/(?<year>^\d{4}$)"] <- (fun args ->
         let year = unbox<string> args?year |> int

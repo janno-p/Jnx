@@ -118,55 +118,57 @@ module Coins =
     let GetCountryStatistics () =
         query { for country in db.``[public].[coins_country]`` do
                 sortBy country.name
-                select (country,
-                        query { for coinage in country.fk_coins_coinage_coins_country do
-                                for common_coin in coinage.fk_coins_common_coin_coins_coinage do
-                                count },
-                        query { for coinage in country.fk_coins_coinage_coins_country do
-                                for common_coin in coinage.fk_coins_common_coin_coins_coinage do
-                                join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
-                                where coin.collected_at.IsSome
-                                count },
-                        query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
-                                count },
-                        query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
-                                join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
-                                where coin.collected_at.IsSome
-                                count }) }
-        |> Seq.map (fun (country, totalCommon, collectedCommon, totalCommemorative, collectedCommemorative) ->
+                select country }
+        |> Seq.map (fun country ->
             { Country = { Code = country.code; Name = country.name; Genitive = country.genitive }
-              TotalCommon = totalCommon
-              CollectedCommon = collectedCommon
-              TotalCommemorative = totalCommemorative
-              CollectedCommemorative = collectedCommemorative } )
+              TotalCommon = query { for coinage in db.``[public].[coins_coinage]`` do
+                                    for common_coin in coinage.fk_coins_common_coin_coins_coinage do
+                                    where (coinage.country_code = country.code)
+                                    count }
+              CollectedCommon = query { for coinage in db.``[public].[coins_coinage]`` do
+                                        for common_coin in coinage.fk_coins_common_coin_coins_coinage do
+                                        join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
+                                        where ((coinage.country_code = country.code) && (coin.collected_at.IsSome))
+                                        count }
+              TotalCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
+                                           count }
+              CollectedCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
+                                               join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
+                                               where (coin.collected_at.IsSome)
+                                               count } } )
         |> Seq.toArray
 
     let OfCountry country =
         let commonCoins = query { for common_coin in db.``[public].[coins_common_coin]`` do
                                   join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
-                                  for coinage in db.``[public].[coins_coinage]`` do
+                                  for coinage in common_coin.fk_coins_common_coin_coins_coinage do
                                   where (coinage.country_code = country.Code)
                                   sortByDescending common_coin.nominal_value
-                                  select { Id = coin.id
-                                           Type = CommonCoin({ Id = coinage.id
-                                                               Year = coinage.year
-                                                               Name = coinage.name
-                                                               Country = country },
-                                                             common_coin.nominal_value)
-                                           ImageUri = coin.image_uri
-                                           NumExtra = coin.num_extra
-                                           CollectedAt = coin.collected_at
-                                           CollectedBy = coin.collected_by } } |> Seq.toArray
+                                  select (coin, common_coin, coinage) }
+                          |> Seq.map (fun (coin, common_coin, coinage) -> 
+                                { Id = coin.id
+                                  Type = CommonCoin({ Id = coinage.id
+                                                      Year = coinage.year
+                                                      Name = coinage.name
+                                                      Country = country }, common_coin.nominal_value)
+                                  ImageUri = coin.image_uri
+                                  NumExtra = coin.num_extra
+                                  CollectedAt = coin.collected_at
+                                  CollectedBy = coin.collected_by })
+                          |> Seq.toArray
         let commemorativeCoins = query { for commemorative_coin in db.``[public].[coins_commemorative_coin]`` do
                                          join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
                                          where (commemorative_coin.country_code = country.Code)
                                          sortByDescending commemorative_coin.year
-                                         select { Id = coin.id
-                                                  Type = CommemorativeCoin(country, commemorative_coin.year, commemorative_coin.common_issue)
-                                                  ImageUri = coin.image_uri
-                                                  NumExtra = coin.num_extra
-                                                  CollectedAt = coin.collected_at
-                                                  CollectedBy = coin.collected_by } } |> Seq.toArray
+                                         select (coin, commemorative_coin) }
+                                 |> Seq.map (fun (coin, commemorativeCoin) ->
+                                        { Id = coin.id
+                                          Type = CommemorativeCoin(country, commemorativeCoin.year, commemorativeCoin.common_issue)
+                                          ImageUri = coin.image_uri
+                                          NumExtra = coin.num_extra
+                                          CollectedAt = coin.collected_at
+                                          CollectedBy = coin.collected_by })
+                                 |> Seq.toArray
         (commonCoins, commemorativeCoins)
 
     let OfCommemorativeYear year =
