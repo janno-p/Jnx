@@ -159,3 +159,4 @@ packages/*
 *.userprefs
 
 ConnectionStrings.config
+Secrets.config

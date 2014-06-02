@@ -6,7 +6,7 @@ open System.Configuration
 
 type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx;",
                            Common.DatabaseProviderTypes.POSTGRESQL,
-                           @"/opt/mono-3.4.0/lib/mono/4.5",
+                           @"/home/janno/Work/Jnx/packages/Npgsql.2.1.3/lib/net45",
                            100,
                            true>
 
@@ -41,6 +41,22 @@ type CountryCoinStatistics =
       CollectedCommemorative : int
       TotalCommon : int
       TotalCommemorative : int }
+
+type User =
+    { Name : string option
+      Email : string
+      IsApproved : bool
+      ProviderName : string
+      ProviderIdentity : string
+      Picture : string
+      Roles : int }
+    static member NewUser with get() = { Name = None
+                                         Email = ""
+                                         IsApproved = false
+                                         ProviderName = ""
+                                         ProviderIdentity = ""
+                                         Picture = ""
+                                         Roles = 0 }
 
 // Partial query builder extensions from
 // http://fpish.net/blog/loic.denuziere/id/3508/2013924-f-query-expressions-and-composability
@@ -229,3 +245,40 @@ module Coins =
                                             CollectedBy = coin.collected_by }
             | _, _ -> failwith "Invalid coin entity found")
         |> Seq.tryFind (fun _ -> true)
+
+module Users =
+    let Create (user : User) =
+        db.ClearUpdates() |> ignore
+        let dbUser = db.``[public].[user]``.Create(user.IsApproved, user.Email, user.Picture, user.Roles)
+        dbUser.provider_name <- user.ProviderName
+        dbUser.provider_identity <- user.ProviderIdentity
+        db.SubmitUpdates()
+        user
+
+    let GetByIdentity providerName identity =
+        query { for user in db.``[public].[user]`` do
+                where (user.provider_name = providerName && user.provider_identity = identity) }
+        |> Seq.map (fun x -> { Name = x.name
+                               Email = x.email
+                               IsApproved = x.approved
+                               ProviderName = x.provider_name
+                               ProviderIdentity = x.provider_identity
+                               Picture = x.provider_picture
+                               Roles = x.roles })
+        |> Seq.tryFind (fun _ -> true)
+
+    let Update user =
+        let dbUser = query { for u in db.``[public].[user]`` do
+                             where (u.provider_name = user.ProviderName && u.provider_identity = user.ProviderIdentity) }
+                     |> Seq.tryFind (fun _ -> true)
+        match dbUser with
+        | Some dbUser ->
+            db.ClearUpdates() |> ignore
+            dbUser.approved <- user.IsApproved
+            dbUser.email <- user.Email
+            dbUser.name <- user.Name
+            dbUser.provider_picture <- user.Picture
+            dbUser.roles <- user.Roles
+            db.SubmitUpdates()
+        | _ -> ()
+        user

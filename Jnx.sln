@@ -26,6 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", 
 		Migrations\201401271817_CreateCountries.fsx = Migrations\201401271817_CreateCountries.fsx
 		Migrations\201405271707_CreateCoinages.fsx = Migrations\201405271707_CreateCoinages.fsx
 		Migrations\201405281120_CreateCoins.fsx = Migrations\201405281120_CreateCoins.fsx
+		Migrations\201406021258_CreateUsers.fsx = Migrations\201406021258_CreateUsers.fsx
 	EndProjectSection
 EndProject
 Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx.Tasks", "Jnx.Tasks\Jnx.Tasks.fsproj", "{301FF209-5A0A-4F20-84DA-5DB7480208C3}"
