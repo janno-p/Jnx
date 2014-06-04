@@ -4,7 +4,8 @@ open Fake
 open Jnx.Tasks.Migrations
 open MigrationBase
 
-type user = { email : string
+type user = { identifier : System.Guid
+              email : string
               name : string option
               provider_name : string
               provider_identity : string
@@ -15,6 +16,7 @@ type user = { email : string
 Target "Upgrade" (fun _ ->
     Migrate (OpenConnection()) (fun (m : IMigrationBuilder<user>) ->
         m.CreateTable (fun t ->
+            t.AddColumn <@ fun x -> x.identifier @> Uuid
             t.AddColumn <@ fun x -> x.email @> (String 150)
             t.AddColumn <@ fun x -> x.name @> (String 150)
             t.AddColumn <@ fun x -> x.provider_name @> (String 50)

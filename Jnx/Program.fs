@@ -1,6 +1,7 @@
 module Jnx.Main
 
 open Nancy
+open Nancy.Authentication.Forms
 open Nancy.Conventions
 open Nancy.Diagnostics
 open Nancy.Hosting.Self
@@ -46,6 +47,15 @@ type Bootstrapper() =
         base.ConfigureConventions conventions
         conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("Scripts", "Scripts", "js"))
         conventions.StaticContentsConventions.Add(StaticContentConventionBuilder.AddDirectory("fonts", "fonts", "eot", "svg", "ttf", "woff"))
+
+    override this.ConfigureRequestContainer (container, context) =
+        base.ConfigureRequestContainer (container, context)
+        container.Register<IUserMapper, Jnx.Authentication.DatabaseUser>() |> ignore
+
+    override this.RequestStartup (container, pipelines, context) =
+        base.RequestStartup (container, pipelines, context)
+        let configuration = FormsAuthenticationConfiguration(RedirectUrl = "~/login", UserMapper = container.Resolve<IUserMapper>())
+        FormsAuthentication.Enable(pipelines, configuration)
 
 [<EntryPoint>]
 let main args =

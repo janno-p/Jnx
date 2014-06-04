@@ -18,6 +18,7 @@ type ColumnType =
     | String of int
     | Text
     | Timestamp
+    | Uuid
 
 type ITableBuilder<'T> =
     abstract member AddColumn : Expr<'T -> 'a> -> ColumnType -> unit
@@ -49,6 +50,7 @@ type TableMeta<'T> () =
                        | String length -> sprintf "VARCHAR(%d)" length
                        | Text -> "TEXT"
                        | Timestamp -> "TIMESTAMP"
+                       | Uuid -> "UUID"
         let nullable = match IsOption runtimeType with
                        | true -> "NULL"
                        | _ -> "NOT NULL"

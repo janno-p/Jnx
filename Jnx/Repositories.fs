@@ -43,14 +43,16 @@ type CountryCoinStatistics =
       TotalCommemorative : int }
 
 type User =
-    { Name : string option
+    { Identifier : Guid
+      Name : string option
       Email : string
       IsApproved : bool
       ProviderName : string
       ProviderIdentity : string
       Picture : string
       Roles : int }
-    static member NewUser with get() = { Name = None
+    static member NewUser with get() = { Identifier = Guid.NewGuid()
+                                         Name = None
                                          Email = ""
                                          IsApproved = false
                                          ProviderName = ""
@@ -247,9 +249,19 @@ module Coins =
         |> Seq.tryFind (fun _ -> true)
 
 module Users =
+    let toModel (x : sql.dataContext.``[public].[user]Entity``) =
+        { Identifier = x.identifier
+          Name = x.name
+          Email = x.email
+          IsApproved = x.approved
+          ProviderName = x.provider_name
+          ProviderIdentity = x.provider_identity
+          Picture = x.provider_picture
+          Roles = x.roles }
+
     let Create (user : User) =
         db.ClearUpdates() |> ignore
-        let dbUser = db.``[public].[user]``.Create(user.IsApproved, user.Email, user.Picture, user.Roles)
+        let dbUser = db.``[public].[user]``.Create(user.IsApproved, user.Email, user.Identifier, user.Picture, user.Roles)
         dbUser.provider_name <- user.ProviderName
         dbUser.provider_identity <- user.ProviderIdentity
         db.SubmitUpdates()
@@ -258,13 +270,13 @@ module Users =
     let GetByIdentity providerName identity =
         query { for user in db.``[public].[user]`` do
                 where (user.provider_name = providerName && user.provider_identity = identity) }
-        |> Seq.map (fun x -> { Name = x.name
-                               Email = x.email
-                               IsApproved = x.approved
-                               ProviderName = x.provider_name
-                               ProviderIdentity = x.provider_identity
-                               Picture = x.provider_picture
-                               Roles = x.roles })
+        |> Seq.map toModel
+        |> Seq.tryFind (fun _ -> true)
+
+    let GetByIdentifier identifier =
+        query { for user in db.``[public].[user]`` do
+                where (user.identifier = identifier) }
+        |> Seq.map toModel
         |> Seq.tryFind (fun _ -> true)
 
     let Update user =

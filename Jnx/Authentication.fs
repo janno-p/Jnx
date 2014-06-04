@@ -3,6 +3,7 @@
 open Jnx.NancyExtensions
 open Jnx.Repositories
 open Nancy
+open Nancy.Authentication.Forms
 open Nancy.Security
 open Nancy.SimpleAuthentication
 open Nancy.Validation
@@ -15,6 +16,13 @@ type UserIdentity (user : User, claims : string list) =
     interface IUserIdentity with
         member this.UserName with get () = userName
         member this.Claims with get() = claims :> IEnumerable<string>
+
+type DatabaseUser () =
+    interface IUserMapper with
+        member this.GetUserFromIdentifier (identifier, context) =
+            match Users.GetByIdentifier identifier with
+            | Some user -> UserIdentity (user, []) :> IUserIdentity
+            | _ -> null
 
 type AuthenticationCallbackProvider () =
     interface IAuthenticationCallbackProvider with
@@ -38,8 +46,8 @@ type AuthenticationCallbackProvider () =
                                                             ProviderIdentity = userInfo.Id }
                 authModule.Context.CurrentUser <- new UserIdentity(user, [])
                 authModule.Flash "success" "Sisselogimine õnnestus"
+                authModule.LoginAndRedirect (user.Identifier, fallbackRedirectUrl = model.ReturnUrl) :> obj
             | e ->
                 authModule.Context.CurrentUser <- null
                 authModule.Flash "error" e.Message
-
-            authModule.Response.AsRedirect("~/") :> obj
+                authModule.Response.AsRedirect "/" :> obj
