@@ -47,6 +47,7 @@
     <Compile Include="CountriesModule.fs" />
     <Compile Include="SiteModule.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="Bootstrapper.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <None Include="ConnectionStrings.config">
@@ -164,20 +165,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Web.Razor.Unofficial">
-      <HintPath>..\packages\System.Web.Razor.Unofficial.2.0.2\lib\net40\System.Web.Razor.Unofficial.dll</HintPath>
-    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.0.22.2\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.Hosting.Self">
-      <HintPath>..\packages\Nancy.Hosting.Self.0.22.2\lib\net40\Nancy.Hosting.Self.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.ViewEngines.Razor">
-      <HintPath>..\packages\Nancy.Viewengines.Razor.0.22.2\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Security">
       <HintPath>..\packages\Npgsql.2.1.3\lib\net45\Mono.Security.dll</HintPath>
     </Reference>
@@ -187,28 +176,40 @@
     <Reference Include="Fancy">
       <HintPath>..\packages\Fanciful.0.3.0-beta\lib\net45\Fancy.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Validation.DataAnnotations">
-      <HintPath>..\packages\Nancy.Validation.DataAnnotations.0.22.2\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
-    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="FSharp.Data.SqlProvider">
       <HintPath>..\packages\FSharp.Data.SqlProvider\FSharp.Data.SqlProvider.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Core" />
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.1\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleAuthentication.Core">
-      <HintPath>..\packages\SimpleAuthentication.Core.0.3.9\lib\net40\SimpleAuthentication.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy.SimpleAuthentication">
       <HintPath>..\packages\Nancy.SimpleAuthentication.0.3.12\lib\net40\Nancy.SimpleAuthentication.dll</HintPath>
     </Reference>
-    <Reference Include="Nancy.Authentication.Forms">
-      <HintPath>..\packages\Nancy.Authentication.Forms.0.22.2\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy">
+      <HintPath>..\packages\Nancy.0.23.0\lib\net40\Nancy.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.1.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.ViewEngines.Razor">
+      <HintPath>..\packages\Nancy.Viewengines.Razor.0.23.0\lib\net40\Nancy.ViewEngines.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Validation.DataAnnotations">
+      <HintPath>..\packages\Nancy.Validation.DataAnnotations.0.23.0\lib\net40\Nancy.Validation.DataAnnotations.dll</HintPath>
+    </Reference>
+    <Reference Include="SimpleAuthentication.Core">
+      <HintPath>..\packages\SimpleAuthentication.Core.0.3.12\lib\net40\SimpleAuthentication.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Hosting.Self">
+      <HintPath>..\packages\Nancy.Hosting.Self.0.23.0\lib\net40\Nancy.Hosting.Self.dll</HintPath>
+    </Reference>
+    <Reference Include="Nancy.Authentication.Forms">
+      <HintPath>..\packages\Nancy.Authentication.Forms.0.23.0\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
