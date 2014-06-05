@@ -5,6 +5,7 @@ open Jnx.Modules.Utils
 open Jnx.Repositories
 open Nancy
 open Nancy.ModelBinding
+open Nancy.Security
 open Nancy.Validation
 open System.Collections.Generic
 open System.ComponentModel.DataAnnotations
@@ -45,6 +46,12 @@ type CountriesModule() as this =
     inherit NancyModule()
 
     do fancy this {
+        before (fun ctx c -> async {
+            return match this.Context.CurrentUser with
+                   | null -> new Response(StatusCode = HttpStatusCode.NotFound)
+                   | _ -> upcast null
+        })
+
         get "/countries" (fun () -> fancyAsync {
             let countries = Countries.GetAll (Range (0, 10))
             return this.View.["Index", countries]
@@ -56,13 +63,13 @@ type CountriesModule() as this =
 
         get "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
             return match Countries.GetByCode code with
-                   | None -> 404 :> obj
+                   | None -> HttpStatusCode.NotFound :> obj
                    | Some country -> this.View.["Show", country] :> obj
         })
 
         get "/countries/(?<code>^[a-z]{2}$)/edit" (fun code -> fancyAsync {
             return match Countries.GetByCode code with
-                   | None -> 404 :> obj
+                   | None -> HttpStatusCode.NotFound :> obj
                    | Some country -> this.View.["Edit", CountryForm.FromModel country] :> obj
         })
 
@@ -84,6 +91,6 @@ type CountriesModule() as this =
 
         delete "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
             Countries.Delete code
-            return 200 :> obj
+            return HttpStatusCode.OK
         })
     }

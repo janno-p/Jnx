@@ -27,5 +27,5 @@ type Bootstrapper() =
 
     override this.RequestStartup (container, pipelines, context) =
         base.RequestStartup (container, pipelines, context)
-        let configuration = FormsAuthenticationConfiguration(RedirectUrl = "~/login", UserMapper = container.Resolve<IUserMapper>())
+        let configuration = FormsAuthenticationConfiguration(RedirectUrl = "/", UserMapper = container.Resolve<IUserMapper>())
         FormsAuthentication.Enable(pipelines, configuration)
