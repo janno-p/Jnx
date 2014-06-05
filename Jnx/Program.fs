@@ -1,11 +1,14 @@
 module Jnx.Main
 
+open Jnx.NancyExtensions
 open Nancy
 open Nancy.Authentication.Forms
 open Nancy.Conventions
 open Nancy.Diagnostics
 open Nancy.Hosting.Self
+open Nancy.Session
 open System
+open System.Collections.Generic
 open System.Threading
 
 type RunningMode = Daemon | Application
@@ -41,6 +44,8 @@ type Bootstrapper() =
     inherit DefaultNancyBootstrapper()
 
     override this.ApplicationStartup (_, pipelines) =
+        CookieBasedSessions.Enable(pipelines) |> ignore
+        SessionFlashStore.Enable(pipelines)
         DiagnosticsHook.Disable(pipelines)
 
     override this.ConfigureConventions conventions =

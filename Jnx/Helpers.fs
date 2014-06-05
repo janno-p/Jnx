@@ -60,3 +60,18 @@ module HtmlHelperExtensions =
         match coin.Type with
         | CommonCoin _ -> true
         | _ -> false
+
+    [<Extension>]
+    let FlashHasKey (this : HtmlHelpers<'T>) (key : string) =
+        match this.RenderContext.Context.Items.TryGetValue Jnx.NancyExtensions.FlashStoreKey with
+        | true, (:? Jnx.NancyExtensions.FlashStore as store) -> store.ContainsKey key
+        | _ -> false
+
+    [<Extension>]
+    let FlashValue (this : HtmlHelpers<'T>) (key : string) =
+        match this.RenderContext.Context.Items.TryGetValue Jnx.NancyExtensions.FlashStoreKey with
+        | true, (:? Jnx.NancyExtensions.FlashStore as store) ->
+            match store.TryGetValue key with
+            | true, value -> value
+            | _ -> null
+        | _ -> null
