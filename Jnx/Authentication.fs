@@ -44,9 +44,14 @@ type AuthenticationCallbackProvider () =
                                 let newUser = populateUser User.NewUser userInfo
                                 Users.Create { newUser with ProviderName = providerName
                                                             ProviderIdentity = userInfo.Id }
-                authModule.Context.CurrentUser <- new UserIdentity(user, [])
-                authModule.Flash "success" "Sisselogimine õnnestus"
-                authModule.LoginAndRedirect (user.Identifier, fallbackRedirectUrl = model.ReturnUrl) :> obj
+                match user.IsApproved with
+                | true ->
+                    authModule.Context.CurrentUser <- new UserIdentity(user, [])
+                    authModule.Flash "success" "Sisselogimine õnnestus."
+                    authModule.LoginAndRedirect (user.Identifier, fallbackRedirectUrl = model.ReturnUrl) :> obj
+                | false ->
+                    authModule.Flash "error" "Antud kasutajal ei ole veel õigusi rakenduse täielikuks kasutamiseks."
+                    authModule.Response.AsRedirect(model.ReturnUrl) :> obj
             | e ->
                 authModule.Context.CurrentUser <- null
                 authModule.Flash "error" e.Message
