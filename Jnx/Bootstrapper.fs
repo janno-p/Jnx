@@ -15,6 +15,7 @@ type Bootstrapper() =
         CookieBasedSessions.Enable(pipelines) |> ignore
         SessionFlashStore.Enable(pipelines)
         DiagnosticsHook.Disable(pipelines)
+        Site.compile()
 
     override this.ConfigureConventions conventions =
         base.ConfigureConventions conventions

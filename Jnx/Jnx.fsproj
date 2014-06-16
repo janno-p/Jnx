@@ -40,13 +40,13 @@
     <Compile Include="NancyExtensions.fs" />
     <Compile Include="Repositories.fs" />
     <Compile Include="Authentication.fs" />
-    <Compile Include="Database.fs" />
     <Compile Include="ModuleUtils.fs" />
     <Compile Include="BlogsModule.fs" />
     <Compile Include="CoinsModule.fs" />
     <Compile Include="CountriesModule.fs" />
     <Compile Include="SiteModule.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="Scripts.fs" />
     <Compile Include="Bootstrapper.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
@@ -153,9 +153,6 @@
     <None Include="Views\Countries\Edit.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Scripts\site.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Content\google_32.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -210,6 +207,18 @@
     </Reference>
     <Reference Include="Nancy.Authentication.Forms">
       <HintPath>..\packages\Nancy.Authentication.Forms.0.23.0\lib\net40\Nancy.Authentication.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript">
+      <HintPath>..\packages\FunScript.1.1.49\lib\net40\FunScript.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.Interop">
+      <HintPath>..\packages\FunScript.1.1.49\lib\net40\FunScript.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.lib">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.lib.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.lib.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.TypeScript.Binding.jquery">
+      <HintPath>..\packages\FunScript.TypeScript.Binding.jquery.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.jquery.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
