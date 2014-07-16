@@ -229,9 +229,9 @@
  return a new, unopened connection using the provided connection string
 </summary>
 </member>
-<member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommandParameter(System.String,System.Object,Microsoft.FSharp.Core.FSharpOption{System.Data.DbType})">
+<member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommandParameter(System.String,System.Object,Microsoft.FSharp.Core.FSharpOption{System.Data.DbType},Microsoft.FSharp.Core.FSharpOption{System.Data.ParameterDirection},Microsoft.FSharp.Core.FSharpOption{System.Int32})">
 <summary>
- return a new command parameter with the provided name, value and optionally type
+ return a new command parameter with the provided name, value and optionally type, direction and length
 </summary>
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommand(System.Data.IDbConnection,System.String)">
@@ -348,6 +348,9 @@
 <summary>
  creates a new SQL entity from alias data in this entity
 </summary>
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -624,31 +627,13 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="T:FSharp.Data.Sql.Patterns">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
 
 </member>
 <member name="">
@@ -1246,10 +1231,26 @@
 <member name="">
 
 </member>
-<member name="F:FSharp.Data.Sql.QueryExpression.QueryExpressionTransformer.ProjectionTransformer.ProjectionMap@">
-<summary>
- holds the columns to select for each entity appearing in the projection tree, or a blank list if all columns         
-</summary>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -1272,11 +1273,6 @@
 <member name="">
 
 </member>
-<member name="P:FSharp.Data.Sql.QueryExpression.QueryExpressionTransformer.ProjectionTransformer.ProjectionMap">
-<summary>
- holds the columns to select for each entity appearing in the projection tree, or a blank list if all columns         
-</summary>
-</member>
 <member name="">
 
 </member>
@@ -1295,11 +1291,20 @@
 <member name="">
 
 </member>
-<member name="T:FSharp.Data.Sql.QueryExpression.QueryExpressionTransformer.ProjectionTransformer">
-<summary>
- Visitor has two uses - 1. extracting the columns the select statement
- 2. transform the projection expression into something that will work with the SqlEntity runtime object e.g. it replaces chunks of the 
-</summary>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Providers.OracleHelpers">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -1512,12 +1517,6 @@
 
 </member>
 <member name="T:FSharp.Data.Sql.Runtime.QueryImplementation">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
 
 </member>
 <member name="">
