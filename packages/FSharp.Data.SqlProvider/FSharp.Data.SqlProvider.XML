@@ -1089,9 +1089,6 @@
 <member name="">
 
 </member>
-<member name="">
-
-</member>
 <member name="M:FSharp.Data.Sql.Providers.PostgresqlProvider.FSharp-Data-Sql-Common-ISqlProvider-GetSprocs(System.Data.IDbConnection)">
 <summary>
  Have not attempted stored procs yet
