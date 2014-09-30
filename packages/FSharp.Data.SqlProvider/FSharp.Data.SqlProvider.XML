@@ -152,20 +152,8 @@
 <member name="">
 
 </member>
-<member name="P:FSharp.Data.Sql.Common.ISqlProvider.SqlToEnum">
-<summary>
- Accepts SQL data type name and returns the relevant value from the DbType enum
-</summary>
-</member>
-<member name="P:FSharp.Data.Sql.Common.ISqlProvider.SqlToClr">
-<summary>
- Accepts SQL data type name and returns the CLR type
-</summary>
-</member>
-<member name="P:FSharp.Data.Sql.Common.ISqlProvider.ClrToEnum">
-<summary>
- Accepts a full CLR type name and returns the relevant value from the DbType enum
-</summary>
+<member name="">
+
 </member>
 <member name="">
 
@@ -178,6 +166,11 @@
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetSprocs(System.Data.IDbConnection)">
 <summary>
  Returns a list of stored procedure metadata
+</summary>
+</member>
+<member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetSprocReturnColumns(System.Data.IDbConnection,FSharp.Data.Sql.Schema.SprocDefinition)">
+<summary>
+ Get Sproc Return Type
 </summary>
 </member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.GetRelationships(System.Data.IDbConnection,FSharp.Data.Sql.Schema.Table)">
@@ -218,6 +211,11 @@
  the columns from the various table aliases that are in the SELECT projection
 </summary>
 </member>
+<member name="M:FSharp.Data.Sql.Common.ISqlProvider.ExecuteSprocCommand(System.Data.IDbCommand,FSharp.Data.Sql.Schema.SprocDefinition,FSharp.Data.Sql.Schema.QueryParameter[],System.Object[])">
+<summary>
+Builds a command representing a call to a stored procedure
+</summary>
+</member>
 <member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateTypeMappings(System.Data.IDbConnection)">
 <summary>
  This function will be called when the provider is first created and should be used
@@ -229,7 +227,7 @@
  return a new, unopened connection using the provided connection string
 </summary>
 </member>
-<member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommandParameter(System.String,System.Object,Microsoft.FSharp.Core.FSharpOption{System.Data.DbType},Microsoft.FSharp.Core.FSharpOption{System.Data.ParameterDirection},Microsoft.FSharp.Core.FSharpOption{System.Int32})">
+<member name="M:FSharp.Data.Sql.Common.ISqlProvider.CreateCommandParameter(FSharp.Data.Sql.Schema.QueryParameter,System.Object)">
 <summary>
  return a new command parameter with the provided name, value and optionally type, direction and length
 </summary>
@@ -238,6 +236,36 @@
 <summary>
  return a new command associated with the provided connection and command text
 </summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -484,6 +512,9 @@
 <member name="">
 
 </member>
+<member name="T:FSharp.Data.Sql.Common.ConfigHelpers">
+
+</member>
 <member name="">
 
 </member>
@@ -511,7 +542,79 @@
 <member name="">
 
 </member>
+<member name="T:FSharp.Data.Sql.Common.Reflection">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Common.SchemaProjections">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Common.Sql">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="T:FSharp.Data.Sql.Common.Utilities">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
 
 </member>
 <member name="">
@@ -996,103 +1099,13 @@
 <member name="">
 
 </member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
 <member name="M:FSharp.Data.Sql.Providers.PostgresqlProvider.FSharp-Data-Sql-Common-ISqlProvider-GetSprocs(System.Data.IDbConnection)">
 <summary>
  Have not attempted stored procs yet
 </summary>
+</member>
+<member name="">
+
 </member>
 <member name="">
 
@@ -1279,6 +1292,21 @@
 <member name="">
 
 </member>
+<member name="T:FSharp.Data.Sql.Providers.MSSqlServer">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="">
 
 </member>
@@ -1294,7 +1322,265 @@
 <member name="">
 
 </member>
-<member name="T:FSharp.Data.Sql.Providers.OracleHelpers">
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Providers.MySql">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Providers.Oracle">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Providers.PostgreSQL">
 
 </member>
 <member name="">
@@ -1336,6 +1622,33 @@
 <member name="">
 
 </member>
+<member name="T:FSharp.Data.Sql.QuotationHelpers">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="">
 
 </member>
@@ -1364,6 +1677,15 @@
 
 </member>
 <member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FSharp.Data.Sql.Runtime.ProviderBuilder">
 
 </member>
 <member name="">
@@ -1627,16 +1949,58 @@
 <member name="">
 
 </member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
 <member name="T:FSharp.Data.Sql.Schema.Patterns">
-
-</member>
-<member name="">
-
-</member>
-<member name="">
-
-</member>
-<member name="T:FSharp.Data.Sql.SchemaProjections">
 
 </member>
 <member name="">

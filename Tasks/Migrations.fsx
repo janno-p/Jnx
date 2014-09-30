@@ -1,3 +1,5 @@
+#!/usr/bin/env fsharpi
+
 #load "MigrationBase.fsx"
 
 open Fake

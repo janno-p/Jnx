@@ -117,19 +117,6 @@
     <None Include="Views\Countries\Show.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\font-awesome.css" />
-    <None Include="Content\font-awesome.min.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="fonts\fontawesome-webfont.eot" />
-    <None Include="fonts\fontawesome-webfont.svg" />
-    <None Include="fonts\fontawesome-webfont.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="fonts\fontawesome-webfont.woff">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="fonts\FontAwesome.otf" />
     <None Include="Views\Countries\Edit.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -156,6 +143,19 @@
     <None Include="Scripts\bootstrap.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\font-awesome.css" />
+    <None Include="Content\font-awesome.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fonts\fontawesome-webfont.eot" />
+    <None Include="fonts\fontawesome-webfont.svg" />
+    <None Include="fonts\fontawesome-webfont.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fonts\fontawesome-webfont.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="fonts\FontAwesome.otf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -164,20 +164,11 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Data" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Mono.Security">
-      <HintPath>..\packages\Npgsql.2.1.3\lib\net45\Mono.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql">
-      <HintPath>..\packages\Npgsql.2.1.3\lib\net45\Npgsql.dll</HintPath>
-    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="FSharp.Data.SqlProvider">
       <HintPath>..\packages\FSharp.Data.SqlProvider\FSharp.Data.SqlProvider.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Core" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
     </Reference>
@@ -208,17 +199,26 @@
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.0.23.2\lib\net40\Nancy.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.0\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript">
-      <HintPath>..\packages\FunScript.1.1.50\lib\net40\FunScript.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.Interop">
-      <HintPath>..\packages\FunScript.1.1.50\lib\net40\FunScript.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="Fancy">
       <HintPath>..\packages\Fanciful.0.3.0-beta\lib\net45\Fancy.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Security">
+      <HintPath>..\packages\Npgsql.2.2.1\lib\net45\Mono.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Npgsql">
+      <HintPath>..\packages\Npgsql.2.2.1\lib\net45\Npgsql.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript">
+      <HintPath>..\packages\FunScript.1.1.57\lib\net40\FunScript.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.Interop">
+      <HintPath>..\packages\FunScript.1.1.57\lib\net40\FunScript.Interop.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

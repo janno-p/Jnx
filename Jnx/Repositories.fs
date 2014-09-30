@@ -1,16 +1,17 @@
 ﻿module Jnx.Repositories
 
 open FSharp.Data.Sql
+open FSharp.Data.Sql.Common
 open System
 open System.Configuration
 
-type sql = SqlDataProvider<"Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx;",
-                           Common.DatabaseProviderTypes.POSTGRESQL,
-                           @"/home/janno/Work/Jnx/packages/Npgsql.2.1.3/lib/net45",
-                           100,
-                           true>
+type Sql = SqlDataProvider<DatabaseProviderTypes.POSTGRESQL,
+                           "Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx;",
+                           ResolutionPath = "/home/janno/Work/Jnx/packages/Npgsql.2.2.1/lib/net45",
+                           IndividualsAmount = 100,
+                           UseOptionTypes = true>
 
-let db = sql.GetDataContext(ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString)
+let db = Sql.GetDataContext(ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString)
 
 type Country =
     { Code : string
@@ -79,218 +80,216 @@ type Paging =
     | Range of int * int
 
 module Countries =
-    let ToModel (country : sql.dataContext.``[public].[coins_country]Entity``) =
-        { Code = country.code; Name = country.name; Genitive = country.genitive }
+    let ToModel (country : Sql.dataContext.``[public].[coins_country]Entity``) =
+        { Code = country.CODE; Name = country.NAME; Genitive = country.GENITIVE }
 
     let GetAll paging =
-        let baseQuery = pquery { for country in db.``[public].[coins_country]`` do
-                                 sortBy country.name }
+        let baseQuery = pquery { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do
+                                 sortBy country.NAME }
         let pagingQuery = match paging with
                           | All -> baseQuery
                           | Range (f, t) -> pquery { for country in %baseQuery do
                                                      skip f
                                                      take (t - f) }
         query { for country in %pagingQuery do
-                select { Code = country.code
-                         Name = country.name
-                         Genitive = country.genitive } } |> Seq.toArray
+                select { Code = country.CODE
+                         Name = country.NAME
+                         Genitive = country.GENITIVE } } |> Seq.toArray
 
     let Save (country : Country) =
         db.ClearUpdates() |> ignore
-        let dbCountry = db.``[public].[coins_country]``.Create(country.Genitive, country.Name)
-        dbCountry.code <- country.Code
+        let dbCountry = db.``[PUBLIC].[COINS_COUNTRY]``.Create(country.Genitive, country.Name)
+        dbCountry.CODE <- country.Code
         db.SubmitUpdates()
         country
 
     let Update code columns =
         db.ClearUpdates() |> ignore
-        let dbCountry = query { for country in db.``[public].[coins_country]`` do where (country.code = code) } |> Seq.head
+        let dbCountry = query { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do where (country.CODE = code) } |> Seq.head
         columns |> Seq.iter (fun (k, v) -> dbCountry.SetColumn(k, v))
         db.SubmitUpdates()
         dbCountry |> ToModel
 
     let GetByCode code =
-        query { for country in db.``[public].[coins_country]`` do where (country.code = code) }
+        query { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do where (country.CODE = code) }
         |> Seq.map ToModel
         |> Seq.tryFind (fun _ -> true)
 
     let Delete code =
         db.ClearUpdates() |> ignore
-        let dbCountry = query { for country in db.``[public].[coins_country]`` do where (country.code = code) } |> Seq.head
+        let dbCountry = query { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do where (country.CODE = code) } |> Seq.head
         dbCountry.Delete()
         db.SubmitUpdates()
 
 module Coins =
     let GetCommemorativeYears () =
-        query { for coin in db.``[public].[coins_commemorative_coin]`` do
-                sortByDescending coin.year
-                select coin.year
+        query { for coin in db.``[PUBLIC].[COINS_COMMEMORATIVE_COIN]`` do
+                sortByDescending coin.YEAR
+                select coin.YEAR
                 distinct } |> Seq.toArray
 
     let GetNominalValues () =
-        query { for coin in db.``[public].[coins_common_coin]`` do
-                sortByDescending coin.nominal_value
-                select coin.nominal_value
+        query { for coin in db.``[PUBLIC].[COINS_COMMON_COIN]`` do
+                sortByDescending coin.NOMINAL_VALUE
+                select coin.NOMINAL_VALUE
                 distinct } |> Seq.toArray
 
     let GetCountryStatistics () =
-        query { for country in db.``[public].[coins_country]`` do
-                sortBy country.name
-                select country }
-        |> Seq.map (fun country ->
-            { Country = { Code = country.code; Name = country.name; Genitive = country.genitive }
-              TotalCommon = query { for coinage in db.``[public].[coins_coinage]`` do
-                                    for common_coin in coinage.fk_coins_common_coin_coins_coinage do
-                                    where (coinage.country_code = country.code)
-                                    count }
-              CollectedCommon = query { for coinage in db.``[public].[coins_coinage]`` do
-                                        for common_coin in coinage.fk_coins_common_coin_coins_coinage do
-                                        join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
-                                        where ((coinage.country_code = country.code) && (coin.collected_at.IsSome))
-                                        count }
-              TotalCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
-                                           count }
-              CollectedCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
-                                               join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
-                                               where (coin.collected_at.IsSome)
-                                               count } } )
+        query { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do
+                sortBy country.NAME
+                select { Country = { Code = country.CODE; Name = country.NAME; Genitive = country.GENITIVE }
+                         TotalCommon = query { for coinage in db.``[PUBLIC].[COINS_COINAGE]`` do
+                                               for common_coin in coinage.fk_coins_common_coin_coins_coinage do
+                                               where (coinage.COUNTRY_CODE = country.CODE)
+                                               count }
+                         CollectedCommon = query { for coinage in db.``[PUBLIC].[COINS_COINAGE]`` do
+                                                   for common_coin in coinage.fk_coins_common_coin_coins_coinage do
+                                                   join coin in db.``[PUBLIC].[COINS_COIN]`` on (common_coin.COIN_ID = coin.ID)
+                                                   where ((coinage.COUNTRY_CODE = country.CODE) && (coin.COLLECTED_AT.IsSome))
+                                                   count }
+                         TotalCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
+                                                      count }
+                         CollectedCommemorative = query { for commemorative_coin in country.fk_coins_commemorative_coin_coins_country do
+                                                          join coin in db.``[PUBLIC].[COINS_COIN]`` on (commemorative_coin.COIN_ID = coin.ID)
+                                                          where (coin.COLLECTED_AT.IsSome)
+                                                          count } } }
         |> Seq.toArray
 
     let OfCountry country =
-        let commonCoins = query { for common_coin in db.``[public].[coins_common_coin]`` do
-                                  join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
+        let commonCoins = query { for common_coin in db.``[PUBLIC].[COINS_COMMON_COIN]`` do
+                                  join coin in db.``[PUBLIC].[COINS_COIN]`` on (common_coin.COIN_ID = coin.ID)
                                   for coinage in common_coin.fk_coins_common_coin_coins_coinage do
-                                  where (coinage.country_code = country.Code)
-                                  sortByDescending common_coin.nominal_value
+                                  where (coinage.COUNTRY_CODE = country.Code)
+                                  sortByDescending common_coin.NOMINAL_VALUE
                                   select (coin, common_coin, coinage) }
                           |> Seq.map (fun (coin, common_coin, coinage) -> 
-                                { Id = coin.id
-                                  Type = CommonCoin({ Id = coinage.id
-                                                      Year = coinage.year
-                                                      Name = coinage.name
-                                                      Country = country }, common_coin.nominal_value)
-                                  ImageUri = coin.image_uri
-                                  NumExtra = coin.num_extra
-                                  CollectedAt = coin.collected_at
-                                  CollectedBy = coin.collected_by })
+                                { Id = coin.ID
+                                  Type = CommonCoin({ Id = coinage.ID
+                                                      Year = coinage.YEAR
+                                                      Name = coinage.NAME
+                                                      Country = country }, common_coin.NOMINAL_VALUE)
+                                  ImageUri = coin.IMAGE_URI
+                                  NumExtra = coin.NUM_EXTRA
+                                  CollectedAt = coin.COLLECTED_AT
+                                  CollectedBy = coin.COLLECTED_BY })
                           |> Seq.toArray
-        let commemorativeCoins = query { for commemorative_coin in db.``[public].[coins_commemorative_coin]`` do
-                                         join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
-                                         where (commemorative_coin.country_code = country.Code)
-                                         sortByDescending commemorative_coin.year
+        let commemorativeCoins = query { for commemorative_coin in db.``[PUBLIC].[COINS_COMMEMORATIVE_COIN]`` do
+                                         join coin in db.``[PUBLIC].[COINS_COIN]`` on (commemorative_coin.COIN_ID = coin.ID)
+                                         where (commemorative_coin.COUNTRY_CODE = country.Code)
+                                         sortByDescending commemorative_coin.YEAR
                                          select (coin, commemorative_coin) }
                                  |> Seq.map (fun (coin, commemorativeCoin) ->
-                                        { Id = coin.id
-                                          Type = CommemorativeCoin(country, commemorativeCoin.year, commemorativeCoin.common_issue)
-                                          ImageUri = coin.image_uri
-                                          NumExtra = coin.num_extra
-                                          CollectedAt = coin.collected_at
-                                          CollectedBy = coin.collected_by })
+                                        { Id = coin.ID
+                                          Type = CommemorativeCoin(country, commemorativeCoin.YEAR, commemorativeCoin.COMMON_ISSUE)
+                                          ImageUri = coin.IMAGE_URI
+                                          NumExtra = coin.NUM_EXTRA
+                                          CollectedAt = coin.COLLECTED_AT
+                                          CollectedBy = coin.COLLECTED_BY })
                                  |> Seq.toArray
         (commonCoins, commemorativeCoins)
 
     let OfCommemorativeYear year =
-        query { for commemorative_coin in db.``[public].[coins_commemorative_coin]`` do
-                where (commemorative_coin.year = year)
-                join coin in db.``[public].[coins_coin]`` on (commemorative_coin.coin_id = coin.id)
-                join country in db.``[public].[coins_country]`` on (commemorative_coin.country_code = country.code)
-                sortBy country.name
-                sortBy coin.id
-                select { Id = coin.id
-                         Type = CommemorativeCoin({ Code = country.code
-                                                    Name = country.name
-                                                    Genitive = country.genitive },
-                                                  commemorative_coin.year,
-                                                  commemorative_coin.common_issue)
-                         ImageUri = coin.image_uri
-                         NumExtra = coin.num_extra
-                         CollectedAt = coin.collected_at
-                         CollectedBy = coin.collected_by } } |> Seq.toArray
+        query { for commemorative_coin in db.``[PUBLIC].[COINS_COMMEMORATIVE_COIN]`` do
+                where (commemorative_coin.YEAR = year)
+                join coin in db.``[PUBLIC].[COINS_COIN]`` on (commemorative_coin.COIN_ID = coin.ID)
+                join country in db.``[PUBLIC].[COINS_COUNTRY]`` on (commemorative_coin.COUNTRY_CODE = country.CODE)
+                sortBy country.NAME
+                sortBy coin.ID
+                select { Id = coin.ID
+                         Type = CommemorativeCoin({ Code = country.CODE
+                                                    Name = country.NAME
+                                                    Genitive = country.GENITIVE },
+                                                  commemorative_coin.YEAR,
+                                                  commemorative_coin.COMMON_ISSUE)
+                         ImageUri = coin.IMAGE_URI
+                         NumExtra = coin.NUM_EXTRA
+                         CollectedAt = coin.COLLECTED_AT
+                         CollectedBy = coin.COLLECTED_BY } } |> Seq.toArray
 
     let OfNominalValue nominalValue =
-        query { for common_coin in db.``[public].[coins_common_coin]`` do
-                where (common_coin.nominal_value = nominalValue)
-                join coin in db.``[public].[coins_coin]`` on (common_coin.coin_id = coin.id)
-                join coinage in db.``[public].[coins_coinage]`` on (common_coin.coinage_id = coinage.id)
-                join country in db.``[public].[coins_country]`` on (coinage.country_code = country.code)
-                sortBy country.name
-                select { Id = coin.id
-                         Type = CommonCoin({ Id = coinage.id
-                                             Year = coinage.year
-                                             Name = coinage.name
-                                             Country = { Code = country.code; Name = country.name; Genitive = country.genitive } },
-                                           common_coin.nominal_value)
-                         ImageUri = coin.image_uri
-                         NumExtra = coin.num_extra
-                         CollectedAt = coin.collected_at
-                         CollectedBy = coin.collected_by } } |> Seq.toArray
+        query { for common_coin in db.``[PUBLIC].[COINS_COMMON_COIN]`` do
+                where (common_coin.NOMINAL_VALUE = nominalValue)
+                join coin in db.``[PUBLIC].[COINS_COIN]`` on (common_coin.COIN_ID = coin.ID)
+                join coinage in db.``[PUBLIC].[COINS_COINAGE]`` on (common_coin.COINAGE_ID = coinage.ID)
+                join country in db.``[PUBLIC].[COINS_COUNTRY]`` on (coinage.COUNTRY_CODE = country.CODE)
+                sortBy country.NAME
+                select { Id = coin.ID
+                         Type = CommonCoin({ Id = coinage.ID
+                                             Year = coinage.YEAR
+                                             Name = coinage.NAME
+                                             Country = { Code = country.CODE; Name = country.NAME; Genitive = country.GENITIVE } },
+                                           common_coin.NOMINAL_VALUE)
+                         ImageUri = coin.IMAGE_URI
+                         NumExtra = coin.NUM_EXTRA
+                         CollectedAt = coin.COLLECTED_AT
+                         CollectedBy = coin.COLLECTED_BY } } |> Seq.toArray
 
     let GetById id =
-        query { for coin in db.``[public].[coins_coin]`` do
-                where (coin.id = id)
+        query { for coin in db.``[PUBLIC].[COINS_COIN]`` do
+                where (coin.ID = id)
                 for common_coin in (!!) coin.fk_coins_common_coin_coins_coin do
                 for commemorative_coin in (!!) coin.fk_coins_commemorative_coin_coins_coin do
                 select (coin, common_coin, commemorative_coin) }
         |> Seq.map (fun (coin, common_coin, commemorative_coin) ->
             match common_coin, commemorative_coin with
-            | common_coin, null -> { Id = coin.id
-                                     Type = CommonCoin(unbox null, common_coin.nominal_value)
-                                     ImageUri = coin.image_uri
-                                     NumExtra = coin.num_extra
-                                     CollectedAt = coin.collected_at
-                                     CollectedBy = coin.collected_by }
-            | null, commemorative_coin -> { Id = coin.id
-                                            Type = CommemorativeCoin(unbox null, commemorative_coin.year, commemorative_coin.common_issue)
-                                            ImageUri = coin.image_uri
-                                            NumExtra = coin.num_extra
-                                            CollectedAt = coin.collected_at
-                                            CollectedBy = coin.collected_by }
+            | common_coin, null -> { Id = coin.ID
+                                     Type = CommonCoin(unbox null, common_coin.NOMINAL_VALUE)
+                                     ImageUri = coin.IMAGE_URI
+                                     NumExtra = coin.NUM_EXTRA
+                                     CollectedAt = coin.COLLECTED_AT
+                                     CollectedBy = coin.COLLECTED_BY }
+            | null, commemorative_coin -> { Id = coin.ID
+                                            Type = CommemorativeCoin(unbox null, commemorative_coin.YEAR, commemorative_coin.COMMON_ISSUE)
+                                            ImageUri = coin.IMAGE_URI
+                                            NumExtra = coin.NUM_EXTRA
+                                            CollectedAt = coin.COLLECTED_AT
+                                            CollectedBy = coin.COLLECTED_BY }
             | _, _ -> failwith "Invalid coin entity found")
         |> Seq.tryFind (fun _ -> true)
 
 module Users =
-    let toModel (x : sql.dataContext.``[public].[user]Entity``) =
-        { Identifier = x.identifier
-          Name = x.name
-          Email = x.email
-          IsApproved = x.approved
-          ProviderName = x.provider_name
-          ProviderIdentity = x.provider_identity
-          Picture = x.provider_picture
-          Roles = x.roles }
+    let toModel (x : Sql.dataContext.``[public].[user]Entity``) =
+        { Identifier = x.IDENTIFIER
+          Name = x.NAME
+          Email = x.EMAIL
+          IsApproved = x.APPROVED
+          ProviderName = x.PROVIDER_NAME
+          ProviderIdentity = x.PROVIDER_IDENTITY
+          Picture = x.PROVIDER_PICTURE
+          Roles = x.ROLES }
 
     let Create (user : User) =
         db.ClearUpdates() |> ignore
-        let dbUser = db.``[public].[user]``.Create(user.IsApproved, user.Email, user.Identifier, user.Picture, user.Roles)
-        dbUser.provider_name <- user.ProviderName
-        dbUser.provider_identity <- user.ProviderIdentity
+        let dbUser = db.``[PUBLIC].[USER]``.Create(user.IsApproved, user.Email, user.Identifier, user.Picture, user.Roles)
+        dbUser.PROVIDER_NAME <- user.ProviderName
+        dbUser.PROVIDER_IDENTITY <- user.ProviderIdentity
         db.SubmitUpdates()
         user
 
     let GetByIdentity providerName identity =
-        query { for user in db.``[public].[user]`` do
-                where (user.provider_name = providerName && user.provider_identity = identity) }
+        query { for user in db.``[PUBLIC].[USER]`` do
+                where (user.PROVIDER_NAME = providerName && user.PROVIDER_IDENTITY = identity) }
         |> Seq.map toModel
         |> Seq.tryFind (fun _ -> true)
 
     let GetByIdentifier identifier =
-        query { for user in db.``[public].[user]`` do
-                where (user.identifier = identifier) }
+        query { for user in db.``[PUBLIC].[USER]`` do
+                where (user.IDENTIFIER = identifier) }
         |> Seq.map toModel
         |> Seq.tryFind (fun _ -> true)
 
     let Update user =
-        let dbUser = query { for u in db.``[public].[user]`` do
-                             where (u.provider_name = user.ProviderName && u.provider_identity = user.ProviderIdentity) }
+        let dbUser = query { for u in db.``[PUBLIC].[USER]`` do
+                             where (u.PROVIDER_NAME = user.ProviderName && u.PROVIDER_IDENTITY = user.ProviderIdentity) }
                      |> Seq.tryFind (fun _ -> true)
         match dbUser with
         | Some dbUser ->
             db.ClearUpdates() |> ignore
-            dbUser.approved <- user.IsApproved
-            dbUser.email <- user.Email
-            dbUser.name <- user.Name
-            dbUser.provider_picture <- user.Picture
-            dbUser.roles <- user.Roles
+            dbUser.APPROVED <- user.IsApproved
+            dbUser.EMAIL <- user.Email
+            dbUser.NAME <- user.Name
+            dbUser.PROVIDER_PICTURE <- user.Picture
+            dbUser.ROLES <- user.Roles
             db.SubmitUpdates()
         | _ -> ()
         user
