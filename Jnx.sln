@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
+Project("{f2a71f9b-5d33-465a-a702-920d77279786}") = "Jnx", "Jnx\Jnx.fsproj", "{54CA1B95-3DED-4420-AB1C-2E0160708D69}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tasks", "Tasks", "{B03017E5-636F-4A73-8599-106B659E57FB}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,18 +29,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", 
 		Migrations\201406021258_CreateUsers.fsx = Migrations\201406021258_CreateUsers.fsx
 	EndProjectSection
 EndProject
-Project("{4925A630-B079-445d-BCD4-3A9C94FE9307}") = "Jnx.Tasks", "Jnx.Tasks\Jnx.Tasks.fsproj", "{301FF209-5A0A-4F20-84DA-5DB7480208C3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{301FF209-5A0A-4F20-84DA-5DB7480208C3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{301FF209-5A0A-4F20-84DA-5DB7480208C3}.Debug|x86.Build.0 = Debug|Any CPU
-		{301FF209-5A0A-4F20-84DA-5DB7480208C3}.Release|x86.ActiveCfg = Release|Any CPU
-		{301FF209-5A0A-4F20-84DA-5DB7480208C3}.Release|x86.Build.0 = Release|Any CPU
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Debug|x86.ActiveCfg = Debug|x86
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Debug|x86.Build.0 = Debug|x86
 		{54CA1B95-3DED-4420-AB1C-2E0160708D69}.Release|x86.ActiveCfg = Release|x86

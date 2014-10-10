@@ -1,66 +1,46 @@
 ﻿#load "../Tasks/MigrationBase.fsx"
 
 open Fake
-open Jnx.Tasks.Migrations
 open MigrationBase
 
-type coins_country = { code : string }
-type coins_coinage = { id : int }
-
-type coins_coin = { image_uri : string
-                    num_extra : int16
-                    collected_at : System.DateTime option
-                    collected_by : string option
-                    id : int }
-
-type coins_common_coin = { nominal_value : decimal
-                           coinage_id : int
-                           coin_id : int }
-
-type coins_commemorative_coin = { year : int16
-                                  common_issue : bool
-                                  country_code : string 
-                                  coin_id : int }
-
 Target "Upgrade" (fun _ ->
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_coin>) ->
-        m.CreateTable (fun t ->
-            t.AddColumn <@ fun x -> x.image_uri @> (String 150)
-            t.AddColumn <@ fun x -> x.num_extra @> SmallInt
-            t.AddColumn <@ fun x -> x.collected_at @> Timestamp
-            t.AddColumn <@ fun x -> x.collected_by @> (String 30)
-        )
-    )
+    exec @"CREATE TABLE coins_coin (
+            id SERIAL NOT NULL,
+            image_uri VARCHAR(150) NOT NULL,
+            num_extra SMALLINT NOT NULL,
+            collected_at TIMESTAMP,
+            collected_by VARCHAR(30),
+            CONSTRAINT pk_coins_coin PRIMARY KEY (id))"
 
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_common_coin>) ->
-        m.CreateTable (fun t ->
-            t.AddColumn <@ fun x -> x.nominal_value @> (Decimal (3, 2))
-            t.AddColumn <@ fun x -> x.coinage_id @> Integer
-            t.AddColumn <@ fun x -> x.coin_id @> Integer
-            t.PrimaryKey <@ fun x -> x.coin_id @>
-            t.ForeignKey <@ fun x (fk : coins_coin) -> (x.coin_id, fk.id) @>
-            t.ForeignKey <@ fun x (fk : coins_coinage) -> (x.coinage_id, fk.id) @>
-            t.Unique <@ fun x -> (x.nominal_value, x.coinage_id) @>
-        )
-    )
+    exec @"CREATE TABLE coins_common_coin (
+            coin_id INTEGER NOT NULL,
+            nominal_value NUMERIC(3,2) NOT NULL,
+            coinage_id INTEGER NOT NULL,
+            CONSTRAINT pk_coins_common_coin PRIMARY KEY (coin_id),
+            CONSTRAINT fk_coins_common_coin_coins_coin FOREIGN KEY (coin_id)
+                REFERENCES coins_coin (id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_coins_common_coin_coins_coinage FOREIGN KEY (coinage_id)
+                REFERENCES coins_coinage (id),
+            CONSTRAINT ak_coins_common_coin_nominal_value_coinage_id UNIQUE (nominal_value, coinage_id))"
 
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_commemorative_coin>) ->
-        m.CreateTable (fun t ->
-            t.AddColumn <@ fun x -> x.year @> SmallInt
-            t.AddColumn <@ fun x -> x.common_issue @> Boolean
-            t.AddColumn <@ fun x -> x.country_code @> (String 2)
-            t.AddColumn <@ fun x -> x.coin_id @> Integer
-            t.PrimaryKey <@ fun x -> x.coin_id @>
-            t.ForeignKey <@ fun x (fk : coins_coin) -> (x.coin_id, fk.id) @>
-            t.ForeignKey <@ fun x (fk : coins_country) -> (x.country_code, fk.code) @>
-        )
-    )
+    exec @"CREATE TABLE coins_commemorative_coin (
+            coin_id INTEGER NOT NULL,
+            year SMALLINT NOT NULL,
+            common_issue BOOLEAN NOT NULL,
+            country_code VARCHAR(2) NOT NULL,
+            CONSTRAINT pk_coins_commemorative_coin PRIMARY KEY (coin_id),
+            CONSTRAINT fk_coins_commemorative_coin_coins_coin FOREIGN KEY (coin_id)
+                REFERENCES coins_coin(id)
+                ON UPDATE CASCADE ON DELETE CASCADE,
+            CONSTRAINT fk_coins_commemorative_coin_coins_country FOREIGN KEY (country_code)
+                REFERENCES coins_country (code))"
 )
 
 Target "Downgrade" (fun _ ->
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_commemorative_coin>) -> m.DropTable ())
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_common_coin>) -> m.DropTable ())
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_coin>) -> m.DropTable ())
+    exec @"DROP TABLE coins_commemorative_coin"
+    exec @"DROP TABLE coins_common_coin"
+    exec @"DROP TABLE coins_coin"
 )
 
 RunTargetOrDefault "Upgrade"

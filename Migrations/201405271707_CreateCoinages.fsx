@@ -1,32 +1,20 @@
 ﻿#load "../Tasks/MigrationBase.fsx"
 
 open Fake
-open Jnx.Tasks.Migrations
 open MigrationBase
 
-type coins_coinage = { year : int16
-                       name : string
-                       country_code : string }
-
-type coins_country = { code : string }
-
 Target "Upgrade" (fun _ ->
-    let coinage year name country_code =
-        { year = year; name = name; country_code = country_code }
-
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_coinage>) ->
-        m.CreateTable (fun t ->
-            t.AddColumn <@ fun x -> x.year @> SmallInt
-            t.AddColumn <@ fun x -> x.name @> (String 150)
-            t.AddColumn <@ fun x -> x.country_code @> (String 2)
-            t.Unique <@ fun x -> x.name @>
-            t.ForeignKey <@ fun x (fk : coins_country) -> (x.country_code, fk.code) @>
-        )
-    )
+    exec @"CREATE TABLE coins_coinage (
+            id SERIAL NOT NULL,
+            year SMALLINT NOT NULL,
+            name VARCHAR(150) NOT NULL,
+            country_code VARCHAR(2) NOT NULL,
+            CONSTRAINT pk_coins_coinage PRIMARY KEY (id),
+            CONSTRAINT fk_coins_coinage_coins_country FOREIGN KEY (country_code)
+                REFERENCES coins_country (code),
+            CONSTRAINT ak_coins_coinage_name UNIQUE (name))"
 )
 
-Target "Downgrade" (fun _ ->
-    Migrate (OpenConnection()) (fun (m : IMigrationBuilder<coins_coinage>) -> m.DropTable ())
-)
+Target "Downgrade" (fun _ -> exec @"DROP TABLE coins_coinage")
 
 RunTargetOrDefault "Upgrade"

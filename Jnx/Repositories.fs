@@ -224,7 +224,7 @@ module Coins =
 module Users =
     let asUser (dr : #IDataRecord) =
         { Identifier = dr?UserIdentifier.Value
-          Name = dr?UserName.Value
+          Name = dr?UserName
           Email = dr?UserEmail.Value
           IsApproved = dr?UserApproved.Value
           ProviderName = dr?UserProviderName.Value
@@ -247,8 +247,8 @@ module Users =
     let Save (user : User) =
         let user, qry =
             match user.Identifier with
-            | id when id = Guid.Empty -> { user with Identifier = Guid.NewGuid() }, "INSERT INTO user (identifier, name, email, approved, provider_name, provider_identity, provider_picture, roles) VALUES (@p1, @p2, @p3, @p4, @p7, @p8, @p5, @p6)"
-            | _ -> user, "UPDATE user SET identifier=@p1, name=@p2, email=@p3, approved=@p4, provider_picture=@p5, roles=@p6 WHERE provider_name=@p7 and provider_identity=@p8"
+            | id when id = Guid.Empty -> { user with Identifier = Guid.NewGuid() }, "INSERT INTO coins_user (identifier, name, email, approved, provider_name, provider_identity, provider_picture, roles) VALUES (@p1, @p2, @p3, @p4, @p7, @p8, @p5, @p6)"
+            | _ -> user, "UPDATE coins_user SET identifier=@p1, name=@p2, email=@p3, approved=@p4, provider_picture=@p5, roles=@p6 WHERE provider_name=@p7 and provider_identity=@p8"
         sql.ExecNonQuery qry [param("p1", user.Identifier)
                               param("p2", user.Name)
                               param("p3", user.Email)
@@ -260,11 +260,11 @@ module Users =
         user
 
     let GetByIdentity (providerName: string) (identity: string) =
-        let qry = sprintf "SELECT %s FROM user WHERE provider_name=@p1 AND provider_identity=@p2" (userColumns None)
+        let qry = sprintf "SELECT %s FROM coins_user WHERE provider_name=@p1 AND provider_identity=@p2" (userColumns None)
         use reader = sql.ExecReader qry [param("p1", providerName); param("p2", identity)]
         reader |> Sql.mapFirst asUser
 
     let GetByIdentifier (identifier: Guid) =
-        let qry = sprintf @"SELECT %s FROM user WHERE identifier=@p1" (userColumns None)
+        let qry = sprintf @"SELECT %s FROM coins_user WHERE identifier=@p1" (userColumns None)
         use reader = sql.ExecReader qry [param("p1", identifier)]
         reader |> Sql.mapFirst asUser
