@@ -39,8 +39,8 @@ module HtmlHelperExtensions =
     [<Extension>]
     let PercentRatio (this : HtmlHelpers<'T>) current total =
         match total with
-        | 0 -> 100
-        | _ -> current * 100 / total
+        | 0L -> 100
+        | _ -> (current * 100L / total) |> int
 
     [<Extension>]
     let CoinNominalValue (this : HtmlHelpers<'T>) (coin : Coin) =

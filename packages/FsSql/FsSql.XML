@@ -1,0 +1,1290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>FsSql</name></assembly>
+<members>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsSql.Async">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsSqlConnectionWrapper">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsSqlOOWrapper">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsSqlOperators">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:FsSqlPrelude">
+
+</member>
+<member name="M:List.ofDataReader``1(``0)">
+<summary>
+ Generates a new list from the given datareader.
+</summary>
+</member>
+<member name="T:List">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpTypeModule.MakeOptionType(System.Type)">
+<summary>
+ Creates an option type
+</summary>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpTypeModule.IsList(System.Type)">
+<summary>
+ Returns true if type is a list
+</summary>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpTypeModule.IsOption(System.Type)">
+<summary>
+ Returns true if type is an Option type
+</summary>
+</member>
+<member name="T:Microsoft.FSharp.Reflection.FSharpTypeModule">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.|OSome|ONone|(System.Object)">
+ <summary>
+ Extracts value associated with a boxed Option.
+ </summary>
+ <exception cref="System.ArgumentException">Argument is not an option</exception>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.|OptionType|NotOptionType|``1(``0)">
+ <summary>
+ OptionType if value to match is a boxed Option, otherwise NotOptionType
+ </summary>
+ <exception cref="System.ArgumentException">Argument is not an option</exception>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.IsSome(System.Object)">
+ <summary>
+ Returns true if object is Some x
+ </summary>
+ <exception cref="System.ArgumentException">Argument is not an option</exception>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.IsNone(System.Object)">
+ <summary>
+ Returns true if object is None
+ </summary>
+ <exception cref="System.ArgumentException">Argument is not an option</exception>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.IsOption(System.Object)">
+<summary>
+ Returns true if object is of option type
+</summary>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.GetOptionValue``1(System.Object)">
+ <summary>
+ Gets the value associated with an option
+ </summary>
+ <exception cref="System.NullReferenceException"><paramref value="opt"/> is null</exception>
+ <exception cref="System.ArgumentException"><paramref value="opt"/> is not an option</exception>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.MakeOptionSome(System.Type,System.Object)">
+ <summary>
+ Creates a Some option for type <paramref name="t"/> and value <paramref name="value"/>
+ </summary>
+</member>
+<member name="M:Microsoft.FSharp.Reflection.FSharpValueModule.MakeOptionNone(System.Type)">
+ <summary>
+ Creates a None option for type <paramref name="t"/>
+ </summary>
+</member>
+<member name="T:Microsoft.FSharp.Reflection.FSharpValueModule">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Option.getOrDefault``1(Microsoft.FSharp.Core.FSharpOption{``0})">
+<summary>
+ Maps None to a default value, otherwise the option&apos;s value
+</summary>
+</member>
+<member name="M:Option.toDBNull``1(Microsoft.FSharp.Core.FSharpOption{``0})">
+<summary>
+ Maps None to DBNull, otherwise the option&apos;s value
+</summary>
+</member>
+<member name="M:Option.fromDBNull``1(System.Object)">
+<summary>
+ Maps DBNull to None, otherwise Some x
+</summary>
+</member>
+<member name="T:Option">
+
+</member>
+<member name="M:Seq.groupBy123``4(System.Collections.Generic.IEnumerable{System.Tuple{``0,``1,``2,``3}})">
+<summary>
+ Groups a 4-tuple sequence by the 3 first elements in each tuple
+</summary>
+</member>
+<member name="M:Seq.groupByFstSnd``3(System.Collections.Generic.IEnumerable{System.Tuple{``0,``1,``2}})">
+<summary>
+ Groups a 3-tuple sequence by the 2 first elements in each tuple
+</summary>
+</member>
+<member name="M:Seq.groupByFst``2(System.Collections.Generic.IEnumerable{System.Tuple{``0,``1}})">
+<summary>
+ Groups a pair sequence by the first element in each tuple
+</summary>
+</member>
+<member name="M:Seq.chooseSnd``3(System.Collections.Generic.IEnumerable{System.Tuple{``0,``1}})">
+<summary>
+ Returns the elements x in snd which are Some(x)
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Seq.ofDataReader``1(``0)">
+<summary>
+ Generates a new forward-only sequence from the given datareader.
+</summary>
+</member>
+<member name="T:Seq">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:SqlModule.Parameter">
+<summary>
+ Represents a parameter to a command
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:SqlModule.ConnectionManager">
+<summary>
+ Encapsulates how to create and dispose a database connection
+</summary>
+</member>
+<member name="M:SqlModule.recordFieldsAlias(System.Type)">
+<summary>
+ Gets all field names from a record type formatted with an alias.
+ E.g. with a field &quot;id&quot; and alias &quot;a&quot;, returns &quot;a.id a_id&quot;
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.recordValues``1(``0)">
+<summary>
+ Gets all field values from a record
+</summary>
+</member>
+<member name="M:SqlModule.asRecord``1">
+<summary>
+ Maps a datarecord to a record &apos;a using an optional prefix for record field names
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.recordFields(System.Type)">
+<summary>
+ Gets all field names from a record type
+</summary>
+</member>
+<member name="M:SqlModule.optionalBy``2(System.String,Microsoft.FSharp.Core.FSharpFunc{``0,``1},``0)">
+ <summary>
+ Converts a mapper into an optional mapper. 
+ Intended to be used when mapping nullable joined tables
+ </summary>
+ <param name="fieldName">Field to use to check for null entity</param>
+</member>
+<member name="M:SqlModule.asTuple4``4">
+<summary>
+ Maps the first 4 fields from a row as a tuple
+</summary>
+</member>
+<member name="M:SqlModule.asTuple3``3">
+<summary>
+ Maps the first 3 fields from a row as a tuple
+</summary>
+</member>
+<member name="M:SqlModule.asTriple``3">
+<summary>
+ Maps the first 3 fields from a row as a tuple
+</summary>
+</member>
+<member name="M:SqlModule.asTuple2``2">
+<summary>
+ Maps the first 2 fields from a row as a tuple
+</summary>
+</member>
+<member name="M:SqlModule.asPair``2">
+<summary>
+ Maps the first 2 fields from a row as a tuple
+</summary>
+</member>
+<member name="M:SqlModule.asScalar``1(System.Data.IDataRecord)">
+<summary>
+ Maps the first field from a row
+</summary>
+</member>
+<member name="M:SqlModule.asScalari``1(System.Int32,System.Data.IDataRecord)">
+<summary>
+ Maps a single field (with position i) from a row.
+</summary>
+</member>
+<member name="M:SqlModule.asDict(System.Data.IDataRecord)">
+<summary>
+ Maps a row as a dictionary of name,value
+</summary>
+</member>
+<member name="M:SqlModule.asMap(System.Data.IDataRecord)">
+<summary>
+ Maps a row as a Map of name,value
+</summary>
+</member>
+<member name="M:SqlModule.asNameValue(System.Data.IDataRecord)">
+<summary>
+ Maps a row as a sequence of name,value
+</summary>
+</member>
+<member name="M:SqlModule.mapOne``1(Microsoft.FSharp.Core.FSharpFunc{System.Data.IDataRecord,``0},System.Data.IDataReader)">
+<summary>
+ Maps a datareader&apos;s single row. Throws if there isn&apos;t exactly one row
+</summary>
+</member>
+<member name="M:SqlModule.mapFirst``1(Microsoft.FSharp.Core.FSharpFunc{System.Data.IDataRecord,``0},System.Data.IDataReader)">
+<summary>
+ Maps a datareader&apos;s first row
+</summary>
+</member>
+<member name="M:SqlModule.execReaderWith``1(SqlModule.ConnectionManager,System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter},Microsoft.FSharp.Core.FSharpFunc{System.Data.IDataRecord,``0})">
+<summary>
+ Executes a query and maps the result
+</summary>
+</member>
+<member name="M:SqlModule.map``1(Microsoft.FSharp.Core.FSharpFunc{System.Data.IDataRecord,``0},System.Data.IDataReader)">
+<summary>
+ Maps a datareader
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecSPScalar``1(SqlModule.ConnectionManager,System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter})">
+<summary>
+ Executes the stored procedure asynchronously, and returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecScalar``1(SqlModule.ConnectionManager,System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter})">
+<summary>
+ Executes the query asynchronously, and returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+</summary>
+</member>
+<member name="M:SqlModule.execSPScalar``1(SqlModule.ConnectionManager,System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter})">
+<summary>
+ Executes the stored procedure, and returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+</summary>
+</member>
+<member name="M:SqlModule.execScalar``1(SqlModule.ConnectionManager,System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter})">
+<summary>
+ Executes the query, and returns the first column of the first row in the resultset returned by the query. Extra columns or rows are ignored.
+</summary>
+</member>
+<member name="M:SqlModule.mapScalar``2(``0)">
+<summary>
+ Maps a &lt;see cref=&quot;IDataReader&quot;/&gt; as a scalar result
+</summary>
+</member>
+<member name="M:SqlModule.readString``1">
+<summary>
+ Reads a string field from a &lt;see cref=&quot;IDataRecord&quot;/&gt;, returns None if null, otherwise Some x
+</summary>
+</member>
+<member name="M:SqlModule.readInt``1">
+<summary>
+ Reads an integer field from a &lt;see cref=&quot;IDataRecord&quot;/&gt;, returns None if null, otherwise Some x
+</summary>
+</member>
+<member name="M:SqlModule.readField``2(System.String,``0)">
+<summary>
+ Reads a field from a &lt;see cref=&quot;IDataRecord&quot;/&gt;, returns None if null, otherwise Some x
+</summary>
+</member>
+<member name="M:SqlModule.isNull``1(``0)">
+<summary>
+ True if the value is a DB null
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecSPNonQuery(SqlModule.ConnectionManager)">
+<summary>
+ Executes a stored procedure asynchronously and returns the number of rows affected
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecNonQuery(SqlModule.ConnectionManager)">
+<summary>
+ Executes a SQL statement asynchronously and returns the number of rows affected
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.execSPNonQuery(SqlModule.ConnectionManager)">
+<summary>
+ Executes a stored procedure and returns the number of rows affected
+</summary>
+</member>
+<member name="M:SqlModule.execNonQuery(SqlModule.ConnectionManager)">
+<summary>
+ Executes a SQL statement and returns the number of rows affected
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.execNonQueryInternal``2(Microsoft.FSharp.Core.FSharpFunc{System.Data.IDbCommand,``0},System.Data.CommandType,SqlModule.ConnectionManager,System.String,``1)">
+<summary>
+ Executes and returns the number of rows affected
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecSPReader(SqlModule.ConnectionManager)">
+<summary>
+ Executes a stored procedure asynchronously and returns a data reader
+</summary>
+</member>
+<member name="M:SqlModule.asyncExecReader(SqlModule.ConnectionManager)">
+<summary>
+ Executes a query asynchronously and returns a data reader
+</summary>
+</member>
+<member name="M:SqlModule.execSPReader(SqlModule.ConnectionManager)">
+<summary>
+ Executes a stored procedure and returns a data reader
+</summary>
+</member>
+<member name="M:SqlModule.execReader(SqlModule.ConnectionManager)">
+<summary>
+ Executes a query and returns a data reader
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.execReaderInternal``2(Microsoft.FSharp.Core.FSharpFunc{System.Data.IDbCommand,Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,Microsoft.FSharp.Core.Unit},``0}},System.Data.CommandType,SqlModule.ConnectionManager,System.String,``1)">
+<summary>
+ Executes and returns a data reader
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.parameters``1(``0)">
+<summary>
+ Creates a list of parameters
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.createCommand(SqlModule.ConnectionManager)">
+<summary>
+ Creates an IDbCommand
+</summary>
+</member>
+<member name="M:SqlModule.addParameter``1(``0,SqlModule.Parameter)">
+<summary>
+ Adds a parameter to a command
+</summary>
+</member>
+<member name="M:SqlModule.execNonQueryF``3(SqlModule.ConnectionManager,Microsoft.FSharp.Core.PrintfFormat{``0,``1,``2,System.Int32})">
+<summary>
+ Executes a printf-formatted SQL statement and returns the number of rows affected
+</summary>
+</member>
+<member name="M:SqlModule.execReaderF``3(SqlModule.ConnectionManager,Microsoft.FSharp.Core.PrintfFormat{``0,``1,``2,System.Data.IDataReader})">
+<summary>
+ Executes a printf-formatted query and returns a data reader
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:SqlModule.withNewConnection(Microsoft.FSharp.Core.FSharpFunc{Microsoft.FSharp.Core.Unit,System.Data.IDbConnection})">
+<summary>
+ Creates a &lt;see cref=&quot;ConnectionManager&quot;/&gt; with an owned connection
+</summary>
+</member>
+<member name="M:SqlModule.withTransaction(System.Data.IDbTransaction)">
+<summary>
+ Creates a &lt;see cref=&quot;ConnectionManager&quot;/&gt; with an externally-owned transaction
+</summary>
+</member>
+<member name="M:SqlModule.withConnection(System.Data.IDbConnection)">
+<summary>
+ Creates a &lt;see cref=&quot;ConnectionManager&quot;/&gt; with an externally-owned connection
+</summary>
+</member>
+<member name="T:SqlModule">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Tx.TxResult`2.Failed">
+<summary>
+ Transaction failed due to an exception and was rolled back
+</summary>
+</member>
+<member name="T:Tx.TxResult`2.Rollback">
+<summary>
+ Transaction manually rolled back
+</summary>
+</member>
+<member name="T:Tx.TxResult`2.Commit">
+<summary>
+ Transaction committed successfully
+</summary>
+</member>
+<member name="T:Tx.TxResult`2">
+<summary>
+ Transaction result
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Tx.rollback``2(``0,SqlModule.ConnectionManager)">
+<summary>
+ Rolls back the transaction.
+ For use within a tx monad.
+</summary>
+</member>
+<member name="M:Tx.execScalar``2(System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter},SqlModule.ConnectionManager)">
+<summary>
+ Executes a query and returns a scalar.
+ For use within a tx monad.
+</summary>
+</member>
+<member name="M:Tx.execReader``1(System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter},SqlModule.ConnectionManager)">
+<summary>
+ Executes a query and returns a data reader.
+ For use within a tx monad.
+</summary>
+</member>
+<member name="M:Tx.execNonQueryi``1(System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter},SqlModule.ConnectionManager)">
+<summary>
+ Executes a SQL statement.
+ For use within a tx monad.
+</summary>
+</member>
+<member name="M:Tx.execNonQuery``1(System.String,System.Collections.Generic.IEnumerable{SqlModule.Parameter},SqlModule.ConnectionManager)">
+<summary>
+ Executes a SQL statement and returns the number of rows affected.
+ For use within a tx monad.
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="M:Tx.transactional2``2(Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0},SqlModule.ConnectionManager)">
+ <summary>
+ Wraps a function in a transaction, returns a <see cref="TxResult"/>
+ </summary>
+</member>
+<member name="M:Tx.required``1(Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0},SqlModule.ConnectionManager)">
+<summary>
+ If there is a running transaction, the function executes within this transaction.
+ Otherwise, a new transaction is started and the function executes within this new transaction.
+</summary>
+</member>
+<member name="M:Tx.supported``2(Microsoft.FSharp.Core.FSharpFunc{``0,``1},``0)">
+<summary>
+ If there is a running transaction, the function executes within this transaction.
+ Otherwise, the function executes without any transaction.
+</summary>
+</member>
+<member name="M:Tx.never``1(Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0},SqlModule.ConnectionManager)">
+<summary>
+ If there is a running transaction, throws.
+ Otherwise, the function executes without any transaction.
+</summary>
+</member>
+<member name="M:Tx.mandatory``1(Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0},SqlModule.ConnectionManager)">
+<summary>
+ If there is a running transaction, the function executes within this transaction.
+ Otherwise, throws.
+</summary>
+</member>
+<member name="M:Tx.transactional``1(Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0})">
+<summary>
+ Wraps a function in a transaction
+</summary>
+</member>
+<member name="M:Tx.transactionalWithIsolation``1(System.Data.IsolationLevel,Microsoft.FSharp.Core.FSharpFunc{SqlModule.ConnectionManager,``0},SqlModule.ConnectionManager)">
+<summary>
+ Wraps a function in a transaction with the specified &lt;see cref=&quot;IsolationLevel&quot;/&gt;
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Tx.Operators">
+
+</member>
+<member name="T:Tx">
+
+</member>
+</members>
+</doc>

@@ -38,12 +38,10 @@ type AuthenticationCallbackProvider () =
                 let userInfo = model.AuthenticatedClient.UserInformation
                 let providerName = model.AuthenticatedClient.ProviderName
                 let user = match Users.GetByIdentity providerName userInfo.Id with
-                           | Some user ->
-                                Users.Update (populateUser user userInfo)
-                           | _ ->
-                                let newUser = populateUser User.NewUser userInfo
-                                Users.Create { newUser with ProviderName = providerName
-                                                            ProviderIdentity = userInfo.Id }
+                           | Some user -> populateUser user userInfo
+                           | _ -> { (populateUser User.NewUser userInfo) with ProviderName = providerName
+                                                                              ProviderIdentity = userInfo.Id }
+                           |> Users.Save
                 match user.IsApproved with
                 | true ->
                     authModule.Context.CurrentUser <- new UserIdentity(user, [])

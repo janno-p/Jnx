@@ -84,7 +84,11 @@ type CountriesModule() as this =
         put "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
             let countryForm = this.BindAndValidate<CountryForm>()
             return match this.ModelValidationResult.IsValid with
-                   | true -> [ ("name", countryForm.Name); ("genitive", countryForm.Genitive) ] |> Countries.Update code |> ignore
+                   | true -> match Countries.GetByCode(code) with
+                             | Some country -> { country with Name = countryForm.Name; Genitive = countryForm.Genitive }
+                                               |> Countries.Save
+                                               |> ignore
+                             | _ -> ()
                              this.Response.AsRedirect("/countries") :> obj
                    | _ -> this.View.["Edit", { countryForm with Errors = this.ModelValidationResult.Errors }] :> obj
         })

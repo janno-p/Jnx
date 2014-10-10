@@ -154,6 +154,7 @@ $RECYCLE.BIN/
 packages/*
 !packages/repositories.config
 !packages/FSharp.Data.SqlProvider
+!packages/FsSql
 
 # MonoDevelop specific configuration
 *.userprefs

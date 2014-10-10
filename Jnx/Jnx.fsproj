@@ -7,8 +7,8 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Jnx</RootNamespace>
     <AssemblyName>Jnx</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -218,7 +218,7 @@
       <HintPath>..\packages\FunScript.1.1.57\lib\net40\FunScript.Interop.dll</HintPath>
     </Reference>
     <Reference Include="FsSql">
-      <HintPath>..\packages\FsSql.1.0.0\lib\FsSql.dll</HintPath>
+      <HintPath>..\packages\FsSql\FsSql.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
