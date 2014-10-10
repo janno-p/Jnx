@@ -1,17 +1,21 @@
 ﻿module Jnx.Repositories
 
-open FSharp.Data.Sql
-open FSharp.Data.Sql.Common
+open Npgsql
 open System
+open System.Data
 open System.Configuration
 
-type Sql = SqlDataProvider<DatabaseProviderTypes.POSTGRESQL,
-                           "Server=127.0.0.1; Port=5432; Database=Jnx; User Id=Jnx; Password=Jnx;",
-                           ResolutionPath = "/home/janno/Work/Jnx/packages/Npgsql.2.2.1/lib/net45",
-                           IndividualsAmount = 100,
-                           UseOptionTypes = true>
+let connectionString = ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString
 
-let db = Sql.GetDataContext(ConfigurationManager.ConnectionStrings.["Jnx"].ConnectionString)
+let openConnection () =
+    let connection = new NpgsqlConnection(connectionString)
+    connection.Open()
+    connection :> IDbConnection
+
+let connectionManager = Sql.withNewConnection(openConnection)
+let sql = SqlWrapper(connectionManager)
+let exec sqlCommand = sql.ExecNonQuery sqlCommand [] |> ignore
+let param = Sql.Parameter.make
 
 type Country =
     { Code : string
@@ -61,40 +65,22 @@ type User =
                                          Picture = ""
                                          Roles = 0 }
 
-// Partial query builder extensions from
-// http://fpish.net/blog/loic.denuziere/id/3508/2013924-f-query-expressions-and-composability
-
-type Linq.QueryBuilder with
-    [<ReflectedDefinition>]
-    member this.Source (queries : Linq.QuerySource<'T, _>) = queries
-
-type PartialQueryBuilder () =
-    inherit Linq.QueryBuilder()
-
-    member this.Run (e : Quotations.Expr<Linq.QuerySource<'T, System.Linq.IQueryable>>) = e
-
-let pquery = PartialQueryBuilder()
-
 type Paging =
     | All
     | Range of int * int
 
 module Countries =
-    let ToModel (country : Sql.dataContext.``[public].[coins_country]Entity``) =
-        { Code = country.CODE; Name = country.NAME; Genitive = country.GENITIVE }
-
     let GetAll paging =
-        let baseQuery = pquery { for country in db.``[PUBLIC].[COINS_COUNTRY]`` do
-                                 sortBy country.NAME }
-        let pagingQuery = match paging with
-                          | All -> baseQuery
-                          | Range (f, t) -> pquery { for country in %baseQuery do
-                                                     skip f
-                                                     take (t - f) }
-        query { for country in %pagingQuery do
-                select { Code = country.CODE
-                         Name = country.NAME
-                         Genitive = country.GENITIVE } } |> Seq.toArray
+        use reader =
+            match paging with
+            | All ->
+                sql.ExecReaderF "select * from coins_country order by name"
+            | Range (f, t) ->
+                sql.ExecReaderF "select * from coins_country order by name limit %d offset %d" (t - f) f
+        reader
+        |> Seq.ofDataReader
+        |> Seq.map (fun dr -> Sql.asRecord<Country> "")
+        |> Seq.toArray
 
     let Save (country : Country) =
         db.ClearUpdates() |> ignore
