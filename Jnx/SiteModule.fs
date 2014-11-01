@@ -17,4 +17,8 @@ type SiteModule() as this =
         get "/logout" (fun () -> fancyAsync {
             return this.LogoutAndRedirect("/")
         })
+
+        get "/admin" (fun () -> fancyAsync {
+            return this.View.["Admin/Index"]
+        })
     }
