@@ -9,19 +9,25 @@ open Nancy.SimpleAuthentication
 open Nancy.Validation
 open System.Collections.Generic
 
-type UserIdentity (user : User, claims : string list) =
+type UserIdentity (user : User) =
     let userName = match user.Name with
                    | Some name -> name
                    | _ -> user.Email.Substring(0, user.Email.IndexOf('@'))
     interface IUserIdentity with
         member this.UserName with get () = userName
-        member this.Claims with get() = claims :> IEnumerable<string>
+        member this.Claims
+            with get() =
+                let claims = [
+                    if not ((user.Roles &&& 1) = 0) then
+                        yield "admin"
+                ]
+                claims :> IEnumerable<string>
 
 type DatabaseUser () =
     interface IUserMapper with
         member this.GetUserFromIdentifier (identifier, context) =
             match Users.GetByIdentifier identifier with
-            | Some user -> UserIdentity (user, []) :> IUserIdentity
+            | Some user -> UserIdentity (user) :> IUserIdentity
             | _ -> null
 
 type AuthenticationCallbackProvider () =
@@ -44,7 +50,7 @@ type AuthenticationCallbackProvider () =
                            |> Users.Save
                 match user.IsApproved with
                 | true ->
-                    authModule.Context.CurrentUser <- new UserIdentity(user, [])
+                    authModule.Context.CurrentUser <- new UserIdentity(user)
                     authModule.Flash "success" "Sisselogimine õnnestus."
                     authModule.LoginAndRedirect (user.Identifier, fallbackRedirectUrl = model.ReturnUrl) :> obj
                 | false ->

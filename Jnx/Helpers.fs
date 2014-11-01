@@ -75,3 +75,7 @@ module HtmlHelperExtensions =
             | true, value -> value
             | _ -> null
         | _ -> null
+
+    [<Extension>]
+    let IsAdmin (this: HtmlHelpers<'T>) (user: Nancy.Security.IUserIdentity) =
+        user.Claims |> Seq.exists (fun r -> r = "admin")
