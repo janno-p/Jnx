@@ -166,9 +166,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="FSharp.Core" />
-    <Reference Include="RestSharp">
-      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
-    </Reference>
     <Reference Include="FunScript.TypeScript.Binding.lib">
       <HintPath>..\packages\FunScript.TypeScript.Binding.lib.1.1.0.37\lib\net40\FunScript.TypeScript.Binding.lib.dll</HintPath>
     </Reference>
@@ -205,20 +202,23 @@
     <Reference Include="Npgsql">
       <HintPath>..\packages\Npgsql.2.2.1\lib\net45\Npgsql.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Razor">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.2\lib\net45\System.Web.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="FunScript">
-      <HintPath>..\packages\FunScript.1.1.57\lib\net40\FunScript.dll</HintPath>
-    </Reference>
-    <Reference Include="FunScript.Interop">
-      <HintPath>..\packages\FunScript.1.1.57\lib\net40\FunScript.Interop.dll</HintPath>
-    </Reference>
     <Reference Include="FsSql">
       <HintPath>..\packages\FsSql\FsSql.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\packages\RestSharp.104.5.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript.Interop">
+      <HintPath>..\packages\FunScript.1.1.81\lib\net40\FunScript.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="FunScript">
+      <HintPath>..\packages\FunScript.1.1.81\lib\net40\FunScript.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
