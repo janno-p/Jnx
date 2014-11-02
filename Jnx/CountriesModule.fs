@@ -9,6 +9,7 @@ open Nancy.Security
 open Nancy.Validation
 open System.Collections.Generic
 open System.ComponentModel.DataAnnotations
+open System.Globalization
 
 type CountryForm =
     { [<Required(ErrorMessage = "Kood on kohustuslik.")>]
@@ -35,12 +36,19 @@ type CountryForm =
 type CountryFormBinder () =
     interface IBinder with
         member this.Bind(context, modelType, instance, configuration, blackList) =
-            { CountryForm.Empty with Name = context.Request.Form?Name
-                                     Code = context.Request.Form?Code
-                                     Genitive = context.Request.Form?Genitive } :> obj
+            { CountryForm.Empty with Name = context.Request.Form?Name.ToString()
+                                     Code = context.Request.Form?Code.ToString()
+                                     Genitive = context.Request.Form?Genitive.ToString() } :> obj
     interface IModelBinder with
         member this.CanBind modelType =
             modelType = typeof<CountryForm>
+
+type CountryList = {
+    Countries: Country []
+    TotalCount: int
+    PageNum: int
+    PageCount: int
+}
 
 type CountriesModule() as this =
     inherit NancyModule()
@@ -96,5 +104,26 @@ type CountriesModule() as this =
         delete "/countries/(?<code>^[a-z]{2}$)" (fun code -> fancyAsync {
             Countries.Delete code
             return HttpStatusCode.OK
+        })
+
+        get "/admin/countries" (fun () -> fancyAsync {
+            let totalCount = Countries.GetTotalCount()
+            let pageSize = 10
+            let pageNum, pageCount =
+                match totalCount with
+                | 0 -> 0, 0
+                | x -> let pageCount = ((totalCount - 1) / pageSize) + 1
+                       let page = this.Request.Query?page.TryParse()
+                       page |> min pageCount |> max 1, pageCount
+            let range = match pageCount with
+                        | 0 -> Range (0, pageSize)
+                        | _ -> Range ((pageNum - 1) * pageSize, pageNum * pageSize)
+            let countryList = {
+                Countries = Countries.GetAll range
+                TotalCount = Countries.GetTotalCount()
+                PageNum = pageNum
+                PageCount = pageCount
+            }
+            return this.View.["Admin/Index", countryList]
         })
     }

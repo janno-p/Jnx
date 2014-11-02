@@ -1,0 +1,44 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Jnx.Modules.CountryList>
+@using Jnx.Helpers
+@{
+    Layout = "Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb">
+    <li><a href="/admin">Admin</a></li>
+    <li class="active">Riigid</li>
+</ol>
+
+<div class="page-header">
+    <a class="btn btn-success btn-lg pull-right" href="/countries/new">
+        <span class="fa fa-edit fa-lg"></span> Lisa uus
+    </a>
+    <h1>Euroala riigid</h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-9">
+<table class="table col-xs-9">
+    <thead>
+        <tr>
+            <th class="col-xs-4">Nimi</th>
+            <th class="col-xs-3">Kood</th>
+            <th class="col-xs-4">Omastav</th>
+            <th class="col-xs-1"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in @Model.Countries) {
+        <tr>
+            <td><a href="#" class="x-editable" data-name="Name" data-type="text" data-pk="@country.Code" data-url="post" data-title="Enter country name">@country.Name</a></td>
+            <td><a href="#" class="x-editable" data-name="Code" data-type="text" data-pk="@country.Code" data-url="post" data-title="Enter country code">@country.Code</a></td>
+            <td><a href="#" class="x-editable" data-name="Genitive" data-type="text" data-pk="@country.Code" data-url="post" data-title="Enter country name in genitive">@country.Genitive</a></td>
+            <td class="text-right"><a class="delete-country text-danger" href="/countries/@country.Code"><i class="fa fa-trash-o"></i></a></td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+    @Html.createPagination(@Model.PageNum, @Model.PageCount)
+    </div>
+</div>

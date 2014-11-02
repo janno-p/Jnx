@@ -78,6 +78,9 @@ let (@~) (qry : StringBuilder) (str : string) = qry.Append(" ").Append(str)
 module Countries =
     let asCountry = Sql.asRecord<Country> ""
 
+    let GetTotalCount (): int =
+        (sql.ExecScalar "SELECT count(code)::integer FROM coins_country" []).Value
+
     let GetAll paging =
         let qry = Query @"select code as ""Code"", name as ""Name"", genitive as ""Genitive"" from coins_country order by name"
         use reader =

@@ -79,3 +79,26 @@ module HtmlHelperExtensions =
     [<Extension>]
     let IsAdmin (this: HtmlHelpers<'T>) (user: Nancy.Security.IUserIdentity) =
         user.Claims |> Seq.exists (fun r -> r = "admin")
+
+    [<Extension>]
+    let createPagination (this: HtmlHelpers<'T>) (pageNum: int) (pageCount: int) =
+        match pageCount with
+        | 0 -> NonEncodedHtmlString("")
+        | _ ->
+            let createItem text num =
+                [
+                yield "<li"
+                if num = pageNum then yield @" class=""disabled"""
+                yield ">"
+                if not (num = pageNum) then yield sprintf @"<a href=""?page=%d"">" num
+                yield sprintf "<span>%s</span>" text
+                if not (num = pageNum) then yield "</a>"
+                yield "</li>"
+                ]
+            let createPage t n = String.Join("", createItem t n)
+            let html = StringBuilder().AppendLine(@"<nav>")
+                                      .AppendLine(@"<ul class=""pagination"">")
+                                      .AppendLine(createPage "&laquo;" (max 1 (pageNum - 1)))
+            for pageNum in 1 .. pageCount do
+                html.AppendLine(createPage (pageNum.ToString()) pageNum) |> ignore
+            html.AppendLine(createPage "&raquo;" (min pageCount (pageNum + 1))) |> toHtml

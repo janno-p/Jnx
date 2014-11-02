@@ -44,6 +44,7 @@
     <Compile Include="BlogsModule.fs" />
     <Compile Include="CoinsModule.fs" />
     <Compile Include="CountriesModule.fs" />
+    <Compile Include="AdminModule.fs" />
     <Compile Include="SiteModule.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Scripts.fs" />
@@ -159,6 +160,33 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="fonts\FontAwesome.otf" />
+    <None Include="Views\Countries\Admin\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\x-editable.1.5.1\bootstrap3-editable\js\bootstrap-editable.min.js">
+      <Link>Scripts\bootstrap-editable.min.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\x-editable.1.5.1\bootstrap3-editable\css\bootstrap-editable.css">
+      <Link>Content\x-editable\css\bootstrap-editable.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\x-editable.1.5.1\bootstrap3-editable\img\clear.png">
+      <Link>Content\x-editable\img\clear.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\x-editable.1.5.1\bootstrap3-editable\img\loading.gif">
+      <Link>Content\x-editable\img\loading.gif</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\sweetalert\lib\sweet-alert.css">
+      <Link>Content\sweetalert\sweet-alert.css</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\packages\sweetalert\lib\sweet-alert.min.js">
+      <Link>Scripts\sweet-alert.min.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -223,5 +251,12 @@
     <Reference Include="Npgsql">
       <HintPath>..\packages\Npgsql.2.2.2\lib\net45\Npgsql.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Countries\Admin\" />
+    <Folder Include="Content\x-editable\" />
+    <Folder Include="Content\x-editable\css\" />
+    <Folder Include="Content\x-editable\img\" />
+    <Folder Include="Content\sweetalert\" />
   </ItemGroup>
 </Project>
