@@ -7,6 +7,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Jnx", "Jnx\Jnx.fsproj", "{D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{DE26D3F9-F8FE-450D-95AC-066FEC2E25A0}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		.nuget\packages.config = .nuget\packages.config
 		paket.dependencies = paket.dependencies
 	EndProjectSection
